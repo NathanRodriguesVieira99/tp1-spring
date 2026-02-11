@@ -20,3 +20,15 @@ GET {{BASE_URL}}/aventureiros/75ab4bfb-7cb7-4f4a-a2a7-8f1f4f855337
 # Query Params 👇
 # ?page=0&size=10&classe=MAGO&ativo=true
 GET {{BASE_URL}}/aventureiros?page=0&size=10&classe=GUERREIRO&ativo=true
+
+###
+
+// crie um usuário e colar o ID dele aqui 👇
+PATCH  {{BASE_URL}}/aventureiros/05c0a654-920e-4584-885b-089cfa53a149
+Content-Type: application/json
+
+{
+  "nome": "Perna Longa",
+  "classe": "GUERREIRO",
+  "nivel":30 
+}
