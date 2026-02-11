@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.edu.infnet.tp1.enums.Classes;
 import com.edu.infnet.tp1.models.Aventureiro;
+import com.edu.infnet.tp1.shared.dtos.AtualizarAventureiroRequestDto;
 import com.edu.infnet.tp1.shared.dtos.PaginationQueryDto;
 
 /**
@@ -77,4 +78,33 @@ public class AventureiroData {
 
   }
 
+  public Optional<Aventureiro> atualizarAventureiro(UUID id, AtualizarAventureiroRequestDto aventureiroAtualizado) {
+    // busca na lista de aventureiros pelo ID
+    Optional<Aventureiro> aventureiro = this.buscarAventureiroPorId(id);
+
+    // se encontrar o aventureiro
+    if (aventureiro.isPresent()) {
+      Aventureiro aventureiroEncontrado = aventureiro.get();
+
+      // se o campo não estiver vazio -> atualiza nome
+      if (aventureiroAtualizado.nome() != null && !aventureiroAtualizado.nome().isEmpty()) {
+        aventureiroEncontrado.setNome(aventureiroAtualizado.nome());
+      }
+
+      // se o campo não estiver vazio -> atualiza classe
+      if (aventureiroAtualizado.classe() != null) {
+        aventureiroEncontrado.setClasse(aventureiroAtualizado.classe());
+      }
+
+      // se o campo não estiver vazio -> atualiza nivel
+      if (aventureiroAtualizado.nivel() != null) {
+        aventureiroEncontrado.setNivel(aventureiroAtualizado.nivel());
+      }
+
+      return Optional.of(aventureiroEncontrado);
+    }
+
+    // se não preencher nenhum requisito
+    return Optional.empty();
+  }
 }
