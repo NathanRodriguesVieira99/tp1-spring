@@ -1,6 +1,6 @@
 package com.edu.infnet.tp1.models;
 
-import com.edu.infnet.tp1.interfaces.Especies;
+import com.edu.infnet.tp1.enums.Especies;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
