@@ -59,7 +59,6 @@ public class ListarAventureirosController {
 
     } catch (IllegalArgumentException e) {
       ErrorMessage error = new ErrorMessage(
-          HttpStatus.BAD_REQUEST.value(),
           "Solicitação inválida",
           e.getMessage());
 

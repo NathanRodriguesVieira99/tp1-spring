@@ -27,7 +27,6 @@ public class RegistrarAventureiroController {
       return ResponseEntity.status(HttpStatus.CREATED).body(novoAventureiro);
     } catch (IllegalArgumentException e) {
       ErrorMessage erro = new ErrorMessage(
-          HttpStatus.UNAUTHORIZED.value(), // -> Status Code
           "Solicitação inválida", // -> Mensgagem
           e.getMessage()); // -> getMessage() -> detalhes do erro vindos do service
 
