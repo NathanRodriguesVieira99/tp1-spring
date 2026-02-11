@@ -1,0 +1,80 @@
+
+package com.edu.infnet.tp1.data;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Repository;
+
+import com.edu.infnet.tp1.enums.Classes;
+import com.edu.infnet.tp1.models.Aventureiro;
+import com.edu.infnet.tp1.shared.dtos.PaginationQueryDto;
+
+/**
+ *
+ * @author nathan_rodrigues
+ */
+@Repository
+public class AventureiroData {
+  private final ArrayList<Aventureiro> aventureiros;
+
+  public AventureiroData() {
+    this.aventureiros = new ArrayList<>();
+
+    for (int i = 0; i < 100; i++) {
+      Aventureiro aventureiro = new Aventureiro(
+          UUID.randomUUID(),
+          "Aventureiro" + (i + 1), // evita comecar em 0
+          Classes.GUERREIRO,
+          Math.random(),
+          true,
+          Optional.empty());
+
+      aventureiros.add(aventureiro);
+    }
+  }
+
+  public Aventureiro registrar(Aventureiro aventureiro) {
+    aventureiros.add(aventureiro);
+    return aventureiro;
+  }
+
+  // Tive que pesquisar como se mapeia em Java, não conhecia esse .stream() para
+  // navegar em lists/arrays
+  public Optional<Aventureiro> buscarAventureiroPorId(UUID id) {
+    return aventureiros.stream().filter(aventureiro -> aventureiro.getId().equals(id)).findFirst();
+  }
+
+  public List<Aventureiro> listarAventureiros(PaginationQueryDto params) {
+    // Filtros
+    List<Aventureiro> aventureirosFiltrados = aventureiros.stream()
+        .filter(av -> params.classe() == null || av.getClasse().name().equals(params.classe()))
+        .filter(av -> params.ativo() == null || av.getAtivo().equals(params.ativo()))
+        .filter(av -> params.nivelMinimo() == null || av.getNivel().doubleValue() >= params.nivelMinimo())
+        .collect(Collectors.toList());
+
+    // Pagination
+    int paginaInicial = params.page() * params.size();
+    int paginaFinal = paginaInicial + params.size();
+
+    if (paginaInicial >= aventureirosFiltrados.size())
+      return new ArrayList<>();
+
+    return aventureirosFiltrados.subList(paginaInicial, Math.min(paginaFinal, aventureirosFiltrados.size()));
+
+  }
+
+  public int contarAventureiros(PaginationQueryDto params) {
+    // Valida e conta o total de Aventureiros na List<Aventureiro>
+    return (int) aventureiros.stream()
+        .filter(av -> params.classe() == null || av.getClasse().name().equals(params.classe()))
+        .filter(av -> params.ativo() == null || av.getAtivo().equals(params.ativo()))
+        .filter(av -> params.nivelMinimo() == null || av.getNivel().doubleValue() >= params.nivelMinimo())
+        .count();
+
+  }
+
+}
