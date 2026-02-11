@@ -17,6 +17,6 @@ public class BuscarAventureiroPorIdService {
 
   public Aventureiro exec(UUID id) {
     return aventureiroData.buscarAventureiroPorId(id)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Aventureiro não encontrado!"));
   }
 }
