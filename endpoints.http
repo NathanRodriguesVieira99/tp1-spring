@@ -1,0 +1,22 @@
+@BASE_URL = http://localhost:8080/api
+
+POST {{BASE_URL}}/aventureiros/create
+Content-Type: application/json
+
+{
+  "nome": "Patolino",
+  "classe": "MAGO",
+  "nivel":10 ,
+  "companheiro": null
+}
+
+###
+
+// crie um usuário e colar o ID dele aqui 👇
+GET {{BASE_URL}}/aventureiros/75ab4bfb-7cb7-4f4a-a2a7-8f1f4f855337
+
+###
+
+# Query Params 👇
+# ?page=0&size=10&classe=MAGO&ativo=true
+GET {{BASE_URL}}/aventureiros?page=0&size=10&classe=GUERREIRO&ativo=true
