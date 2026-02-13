@@ -9,12 +9,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.edu.infnet.tp1.models.Aventureiro;
 import com.edu.infnet.tp1.services.AtualizarDadosAventureiroService;
 import com.edu.infnet.tp1.shared.dtos.AtualizarAventureiroRequestDto;
-import com.edu.infnet.tp1.shared.errors.ErrorMessage;
 
 @RestController
 @RequestMapping("/api/aventureiros")
@@ -26,16 +24,10 @@ public class AtualizarDadosAventureiroController {
   public ResponseEntity<?> atualizarDadosAventureiro(
       @PathVariable UUID id,
       @RequestBody AtualizarAventureiroRequestDto aventureiroAtualizado) {
-    try {
-      Aventureiro resultado = atualizarDadosAventureiroService.exec(id, aventureiroAtualizado);
 
-      return ResponseEntity.ok().body(resultado);
-    } catch (ResponseStatusException e) {
-      ErrorMessage error = new ErrorMessage(
-          "Solicitação inválida",
-          e.getMessage());
+    Aventureiro resultado = atualizarDadosAventureiroService.exec(id, aventureiroAtualizado);
 
-      return ResponseEntity.status(e.getStatusCode()).body(error);
-    }
+    return ResponseEntity.ok().body(resultado);
+
   }
 }

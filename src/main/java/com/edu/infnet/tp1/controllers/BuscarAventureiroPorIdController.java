@@ -9,11 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.edu.infnet.tp1.models.Aventureiro;
 import com.edu.infnet.tp1.services.BuscarAventureiroPorIdService;
-import com.edu.infnet.tp1.shared.errors.ErrorMessage;
+
 
 @RestController
 @RequestMapping("/api/aventureiros")
@@ -24,16 +23,10 @@ public class BuscarAventureiroPorIdController {
 
   @GetMapping("/{id}")
   public ResponseEntity<?> listarAventureiros(@PathVariable UUID id) {
-    try {
-      Aventureiro aventureiro = buscarAventureirosPorIdService.exec(id);
 
-      return ResponseEntity.status(HttpStatus.OK).body(aventureiro);
-    } catch (ResponseStatusException e) {
-      ErrorMessage error = new ErrorMessage(
-          "Solicitação inválida",
-          e.getMessage());
+    Aventureiro aventureiro = buscarAventureirosPorIdService.exec(id);
 
-      return ResponseEntity.status(e.getStatusCode()).body(error);
-    }
+    return ResponseEntity.status(HttpStatus.OK).body(aventureiro);
+
   }
 }
