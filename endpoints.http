@@ -22,8 +22,8 @@ GET {{BASE_URL}}/aventureiros/75ab4bfb-7cb7-4f4a-a2a7-8f1f4f855337
 ###
 
 # Query Params 👇
-# ?page=0&size=10&classe=MAGO&ativo=true
-GET {{BASE_URL}}/aventureiros?page=0&size=10&classe=GUERREIRO&ativo=true
+# ?page=0&size=10&classe=MAGO&ativo=true&nivel=1
+GET {{BASE_URL}}/aventureiros?page=0&size=10&classe=MAGO&ativo=true&nivelMinimo=1
 
 ###
 
