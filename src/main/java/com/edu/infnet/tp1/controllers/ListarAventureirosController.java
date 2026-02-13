@@ -24,8 +24,10 @@ public class ListarAventureirosController {
   ListarAventureirosService listarAventureirosService;
 
   @GetMapping()
-  public ResponseEntity<?> listarAventureiros(@RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "10") int size, @RequestParam(required = false) String classe,
+  public ResponseEntity<?> listarAventureiros(
+    @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "10") int size, 
+      @RequestParam(required = false) String classe,
       @RequestParam(required = false) Boolean ativo,
       @RequestParam(required = false) Integer nivelMinimo) {
 
