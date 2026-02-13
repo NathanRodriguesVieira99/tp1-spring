@@ -1,9 +1,12 @@
 @BASE_URL = http://localhost:8080/api
 
+# Captura o ID na hora de registrar um aventureiro para reutilizar dinamicamente.
+@ID = {{Registrar_Aventureiro.response.body.id}} 
+
 GET {{BASE_URL}}/health
 
 ###
-
+# @name Registrar_Aventureiro
 POST {{BASE_URL}}/aventureiros/create
 Content-Type: application/json
 
@@ -16,8 +19,8 @@ Content-Type: application/json
 
 ###
 
-// crie um usuário e colar o ID dele aqui 👇
-GET {{BASE_URL}}/aventureiros/75ab4bfb-7cb7-4f4a-a2a7-8f1f4f855337
+
+GET {{BASE_URL}}/aventureiros/{{ID}}
 
 ###
 
@@ -27,12 +30,23 @@ GET {{BASE_URL}}/aventureiros?page=0&size=10&classe=MAGO&ativo=true&nivelMinimo=
 
 ###
 
-// crie um usuário e colar o ID dele aqui 👇
-PATCH  {{BASE_URL}}/aventureiros/05c0a654-920e-4584-885b-089cfa53a149
+
+PATCH  {{BASE_URL}}/aventureiros/{{ID}}
 Content-Type: application/json
 
 {
   "nome": "Perna Longa",
   "classe": "GUERREIRO",
   "nivel":30 
+}
+
+###
+
+POST {{BASE_URL}}/companheiros/create/{{ID}}
+Content-Type: application/json
+
+{
+"nome": "Esquisito",
+"especie": "LOBO", 
+"lealdade": 50 
 }
