@@ -1,8 +1,6 @@
 # ⚔️ TP1 Spring Boot
 
 > API REST para o Registro Oficial da Guilda de Aventureiros — dados em memória, sem banco externo.
->
-> [Enunciado completo](https://hackmd.io/rqYVt4w_S2SQo_zgDIzPiA)
 
 ![Java](https://img.shields.io/badge/Java-21-orange?logo=openjdk)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.2-brightgreen?logo=springboot)
@@ -303,14 +301,29 @@ O arquivo [`endpoints.http`](endpoints.http) na raiz do projeto contém exemplos
 
 ## ❌ Padrão de Erro
 
-Todas as respostas de erro seguem o formato:
+Todas as respostas de erro seguem o formato JSON padronizado pela aplicação. Dois mecanismos principais ajudam a padronizar o retorno e evitar o uso de try catch nos controllers:
+
+- a classe `ErrorMessage` em `src/main/java/com/edu/infnet/tp1/shared/errors/ErrorMessage.java` — modelo usado por alguns `@ControllerAdvice` existentes;
+- o `@ControllerAdvice` global em `src/main/java/com/edu/infnet/tp1/shared/RestControllerAdvice.java` — centraliza o tratamento das exceções lançadas pelos `Service`s e controla o body e o status HTTP.
+
+Exemplo de resposta de erro que a aplicação retorna quando parâmetros são inválidos:
 
 ```json
 {
-  "mensagem": "Solicitação inválida",
-  "detalhes": "classe inválida"
+  "status": "status code (ex:404,401)",
+  "message": "message"
 }
 ```
+
+Como funciona:
+
+- Nos `Services` lance exceções customizadas com mensagens claras, por exemplo:
+
+```java
+throw new AventureiroInvalidParamsException();
+```
+
+- O `@ControllerAdvice` centralizado intercepta essas exceções e transforma em um `ResponseEntity` com o JSON padronizado (`HttpStatus` + `message`). Veja `src/main/java/com/edu/infnet/tp1/shared/RestControllerAdvice.java`.
 
 ---
 
@@ -318,7 +331,6 @@ Todas as respostas de erro seguem o formato:
 
 ```
 src/main/java/com/edu/infnet/tp1/
-├── Tp1Application.java              # Classe principal
 ├── controllers/                     # Controladores REST (1 por operação)
 │   ├── RegistrarAventureiroController.java
 │   ├── BuscarAventureiroPorIdController.java
@@ -346,12 +358,17 @@ src/main/java/com/edu/infnet/tp1/
 ├── data/                            # Simulação de banco de dados (ArrayList)
 │   └── AventureiroData.java
 └── shared/
-    ├── dtos/                        # Data Transfer Objects
-    │   ├── AtualizarAventureiroRequestDto.java
-    │   ├── PaginationQueryDto.java
-    │   └── PaginationResponseDto.java
-    └── errors/                      # Padrão de erro
-        └── ErrorMessage.java
+  ├── dtos/                        # Data Transfer Objects
+  │   ├── AtualizarAventureiroRequestDto.java
+  │   ├── PaginationQueryDto.java
+  │   └── PaginationResponseDto.java
+  ├── errors/                      # Padrão de erro
+  │   └── ErrorMessage.java
+  ├── exceptions/                  # Exceções customizadas
+  │   ├── AventureiroNotFoundException.java
+  │   ├── AventureiroInvalidParamsException.java
+  └── RestControllerAdvice.java    # Handlers de exceção centralizados
+├── Tp1Application.java              # Classe principal
 ```
 
 ---
@@ -360,5 +377,4 @@ src/main/java/com/edu/infnet/tp1/
 
 - **Sem banco de dados** — os dados são armazenados em `ArrayList` em memória (`AventureiroData`)
 - A lista é inicializada com **100 aventureiros** da classe `GUERREIRO` ao iniciar a aplicação
-- As listagens são retornadas em ordem de inserção
 - Arquitetura: **1 Controller + 1 Service por operação**
