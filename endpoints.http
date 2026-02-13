@@ -1,5 +1,9 @@
 @BASE_URL = http://localhost:8080/api
 
+GET {{BASE_URL}}/health
+
+###
+
 POST {{BASE_URL}}/aventureiros/create
 Content-Type: application/json
 
