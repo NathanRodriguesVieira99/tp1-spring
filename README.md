@@ -78,7 +78,7 @@ Valide se está rodando em `http://localhost:8080/api/health`
 | 4   | Atualizar dados do aventureiro | `PATCH`  | `/api/aventureiros/{id}`   | ✅ Implementado |
 | 5   | Encerrar vínculo com a guilda  | `PATCH`  | `/api/aventureiro/{id}`    | ⬜ Pendente     |
 | 6   | Recrutar novamente             | `PATCH`  | `—`                        | ⬜ Pendente     |
-| 7   | Definir/substituir companheiro | `POST`   | `/api/companheiros/{id}`   | ⬜ Pendente     |
+| 7   | Definir/substituir companheiro | `POST`   | `/api/companheiros/{id}`   | ✅ Implementado |
 | 8   | Remover companheiro            | `DELETE` | `/api/companheiros/{id}`   | ⬜ Pendente     |
 
 ---
@@ -260,7 +260,7 @@ Altera o estado do aventureiro para `ativo = true`.
 
 ---
 
-### 7️⃣ Definir ou substituir companheiro _(pendente)_
+### 7️⃣ Definir ou substituir companheiro
 
 Cria ou substitui o companheiro associado a um aventureiro.
 
@@ -380,3 +380,4 @@ src/main/java/com/edu/infnet/tp1/
 - **Sem banco de dados** — os dados são armazenados em `ArrayList` em memória (`AventureiroData`)
 - A lista é inicializada com **100 aventureiros** da classe `GUERREIRO` ao iniciar a aplicação
 - Arquitetura: **1 Controller + 1 Service por operação**
+****
