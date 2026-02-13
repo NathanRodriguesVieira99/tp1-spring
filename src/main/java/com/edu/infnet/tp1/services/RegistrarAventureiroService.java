@@ -1,19 +1,20 @@
 package com.edu.infnet.tp1.services;
 
-import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.edu.infnet.tp1.data.AventureiroData;
 import com.edu.infnet.tp1.models.Aventureiro;
 import com.edu.infnet.tp1.shared.exceptions.AventureiroInvalidParamsException;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class RegistrarAventureiroService {
-  @Autowired
-  AventureiroData aventureiroData;
+
+  private final AventureiroData aventureiroData;
 
   public Aventureiro exec(Aventureiro aventureiro) {
     if (aventureiro.getId() == null)
@@ -31,8 +32,8 @@ public class RegistrarAventureiroService {
     if (aventureiro.getAtivo() == null || aventureiro.getAtivo() == false)
       aventureiro.setAtivo(true);
 
-    // Optional.empty() -> forca o campo 'companheiro' a ser vazio
-    aventureiro.setCompanheiro(Optional.empty());
+    // força o campo 'companheiro' a ser vazio
+    aventureiro.setCompanheiro(null);
 
     return aventureiroData.registrar(aventureiro);
   }

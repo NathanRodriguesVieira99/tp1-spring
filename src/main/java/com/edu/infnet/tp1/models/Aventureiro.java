@@ -1,6 +1,5 @@
 package com.edu.infnet.tp1.models;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import com.edu.infnet.tp1.enums.Classes;
@@ -25,5 +24,5 @@ public class Aventureiro {
   private Classes classe;
   private Integer nivel;
   private Boolean ativo;
-  private Optional<String> companheiro;
+  private Companheiro companheiro;
 }
