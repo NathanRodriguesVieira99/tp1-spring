@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.edu.infnet.tp1.enums.Classes;
 import com.edu.infnet.tp1.models.Aventureiro;
+import com.edu.infnet.tp1.models.Companheiro;
 import com.edu.infnet.tp1.shared.dtos.AtualizarAventureiroRequestDto;
 import com.edu.infnet.tp1.shared.dtos.PaginationQueryDto;
 
@@ -32,7 +33,7 @@ public class AventureiroData {
           Classes.GUERREIRO,
           (int) (Math.random() * 100) + 1, // gera nivel ente 1 e 100
           true,
-          Optional.empty());
+          null);
 
       aventureiros.add(aventureiro);
     }
@@ -106,5 +107,21 @@ public class AventureiroData {
 
     // se não preencher nenhum requisito
     return Optional.empty();
+  }
+
+  public Companheiro definirCompanheiro(UUID id, Companheiro companheiro) {
+    Optional<Aventureiro> aventureiroSemCompanheiro = buscarAventureiroPorId(id);
+
+    if (aventureiroSemCompanheiro.isPresent()) {
+      Aventureiro aventureiroEncontrado = aventureiroSemCompanheiro.get();
+
+      if (aventureiroEncontrado.getCompanheiro() == null) {
+        aventureiroEncontrado.setCompanheiro(companheiro);
+        return companheiro;
+      } else {
+        return aventureiroEncontrado.getCompanheiro();
+      }
+    }
+    return null;
   }
 }
