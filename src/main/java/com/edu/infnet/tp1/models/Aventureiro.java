@@ -7,6 +7,7 @@ import com.edu.infnet.tp1.enums.Classes;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -17,11 +18,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Aventureiro {
   private UUID id;
   private String nome;
   private Classes classe;
-  private Number nivel;
+  private Integer nivel;
   private Boolean ativo;
   private Optional<String> companheiro;
 }

@@ -30,7 +30,7 @@ public class AventureiroData {
           UUID.randomUUID(),
           "Aventureiro" + (i + 1), // evita comecar em 0
           Classes.GUERREIRO,
-          Math.random(),
+          (int) (Math.random() * 100) + 1, // gera nivel ente 1 e 100
           true,
           Optional.empty());
 
@@ -98,7 +98,7 @@ public class AventureiroData {
 
       // se o campo não estiver vazio -> atualiza nivel
       if (aventureiroAtualizado.nivel() != null) {
-        aventureiroEncontrado.setNivel(aventureiroAtualizado.nivel());
+        aventureiroEncontrado.setNivel(aventureiroAtualizado.nivel().intValue());
       }
 
       return Optional.of(aventureiroEncontrado);
