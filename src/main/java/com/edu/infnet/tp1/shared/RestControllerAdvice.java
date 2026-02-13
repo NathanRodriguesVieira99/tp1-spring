@@ -9,6 +9,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.edu.infnet.tp1.shared.errors.ErrorMessage;
 import com.edu.infnet.tp1.shared.exceptions.AventureiroInvalidParamsException;
 import com.edu.infnet.tp1.shared.exceptions.AventureiroNotFoundException;
+import com.edu.infnet.tp1.shared.exceptions.InvalidQueryParamException;
 
 // @ControllerAdvice -> Serve para padronizar as Exceptions para evitar TryCatch  nos controllers
 // Se não houver exceptions customizadas no service, o controller vai lancar a padrão do Java
@@ -25,5 +26,12 @@ public class RestControllerAdvice extends ResponseEntityExceptionHandler {
   private ResponseEntity<ErrorMessage> aventureiroNotFoundExceptionHandler(AventureiroNotFoundException exception) {
     ErrorMessage errorMessage = new ErrorMessage(HttpStatus.NOT_FOUND, "O aventureiro não foi encontrado.");
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
+  }
+
+  @ExceptionHandler(InvalidQueryParamException.class)
+  private ResponseEntity<ErrorMessage> invalidPageNumberException(InvalidQueryParamException exception){
+    ErrorMessage errorMessage=new ErrorMessage(HttpStatus.UNAUTHORIZED, "Query Params inválidos!");
+
+    return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMessage);
   }
 }
