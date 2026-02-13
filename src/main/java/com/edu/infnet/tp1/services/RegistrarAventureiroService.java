@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.edu.infnet.tp1.data.AventureiroData;
 import com.edu.infnet.tp1.models.Aventureiro;
+import com.edu.infnet.tp1.shared.exceptions.AventureiroInvalidParamsException;
 
 @Service
 public class RegistrarAventureiroService {
@@ -19,13 +20,13 @@ public class RegistrarAventureiroService {
       aventureiro.setId(UUID.randomUUID());
 
     if (aventureiro.getNome() == null || aventureiro.getNome().isBlank())
-      throw new IllegalArgumentException("O nome do aventureiro não pode ser vazio!");
+      throw new AventureiroInvalidParamsException();
 
     if (aventureiro.getClasse() == null)
-      throw new IllegalArgumentException("A classe não pode ser vazia!");
+      throw new AventureiroInvalidParamsException();
 
-    if (aventureiro.getNivel() == null || aventureiro.getNivel().intValue() <= 0)
-      throw new IllegalArgumentException("O nível não pode ser menor do que 1 ou vazio!");
+    if (aventureiro.getNivel() == null || aventureiro.getNivel() <= 0)
+      throw new AventureiroInvalidParamsException();
 
     if (aventureiro.getAtivo() == null || aventureiro.getAtivo() == false)
       aventureiro.setAtivo(true);
