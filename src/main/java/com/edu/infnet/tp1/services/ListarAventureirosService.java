@@ -2,17 +2,19 @@ package com.edu.infnet.tp1.services;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.edu.infnet.tp1.data.AventureiroData;
 import com.edu.infnet.tp1.models.Aventureiro;
 import com.edu.infnet.tp1.shared.dtos.PaginationQueryDto;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class ListarAventureirosService {
-  @Autowired
-  AventureiroData aventureiroData;
+
+  private final AventureiroData aventureiroData;
 
   public List<Aventureiro> exec(PaginationQueryDto params) {
     if (params.page() < 0) {
