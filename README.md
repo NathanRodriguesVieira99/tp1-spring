@@ -141,7 +141,7 @@ Retorna aventureiros cadastrados com suporte a filtros e paginação.
 **Exemplo:**
 
 ```
-GET /api/aventureiros?page=0&size=10&classe=GUERREIRO&ativo=true
+GET /api/aventureiros?page=0&size=10&classe=GUERREIRO&ativo=true&nivelMinimo=1
 ```
 
 **Response Headers de paginação:**
