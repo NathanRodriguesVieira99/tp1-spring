@@ -35,6 +35,8 @@ cd tp1-spring
 
 A API estará disponível em `http://localhost:8080/api`.
 
+Valide se está rodando em `http://localhost:8080/api/health`
+
 ---
 
 ## 📖 Conceitos do Domínio
