@@ -9,6 +9,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.edu.infnet.tp1.shared.errors.ErrorMessage;
 import com.edu.infnet.tp1.shared.exceptions.AventureiroInvalidParamsException;
 import com.edu.infnet.tp1.shared.exceptions.AventureiroNotFoundException;
+import com.edu.infnet.tp1.shared.exceptions.CompanheiroInvalidParamsException;
 import com.edu.infnet.tp1.shared.exceptions.InvalidQueryParamException;
 
 // @ControllerAdvice -> Serve para padronizar as Exceptions para evitar TryCatch  nos controllers
@@ -18,7 +19,7 @@ public class RestControllerAdvice extends ResponseEntityExceptionHandler {
   @ExceptionHandler(AventureiroInvalidParamsException.class)
   private ResponseEntity<ErrorMessage> aventureiroInvalidParamsHandler(AventureiroInvalidParamsException exception) {
     ErrorMessage errorMessage = new ErrorMessage(HttpStatus.UNAUTHORIZED,
-        "O Aventureiro foi criado com paramtros inválidos.");
+        "O Aventureiro foi criado com parametros inválidos.");
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMessage);
   }
 
@@ -29,9 +30,17 @@ public class RestControllerAdvice extends ResponseEntityExceptionHandler {
   }
 
   @ExceptionHandler(InvalidQueryParamException.class)
-  private ResponseEntity<ErrorMessage> invalidPageNumberException(InvalidQueryParamException exception){
-    ErrorMessage errorMessage=new ErrorMessage(HttpStatus.UNAUTHORIZED, "Query Params inválidos!");
+  private ResponseEntity<ErrorMessage> invalidPageNumberException(InvalidQueryParamException exception) {
+    ErrorMessage errorMessage = new ErrorMessage(HttpStatus.UNAUTHORIZED, "Query Params inválidos!");
 
-    return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMessage);
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMessage);
+  }
+
+  @ExceptionHandler(CompanheiroInvalidParamsException.class)
+  private ResponseEntity<ErrorMessage> invalidCompanheiroParamsException(CompanheiroInvalidParamsException exception) {
+    ErrorMessage errorMessage = new ErrorMessage(HttpStatus.UNAUTHORIZED,
+        "O Companheiro foi criado com parametros inválidos.");
+
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMessage);
   }
 }
