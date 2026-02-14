@@ -14,6 +14,8 @@ import com.edu.infnet.tp1.models.Aventureiro;
 import com.edu.infnet.tp1.models.Companheiro;
 import com.edu.infnet.tp1.shared.dtos.AtualizarAventureiroRequestDto;
 import com.edu.infnet.tp1.shared.dtos.PaginationQueryDto;
+import com.edu.infnet.tp1.shared.exceptions.AventureiroNotFoundException;
+import com.edu.infnet.tp1.shared.exceptions.CompanheiroInvalidParamsException;
 
 /**
  *
@@ -115,13 +117,36 @@ public class AventureiroData {
     if (aventureiroSemCompanheiro.isPresent()) {
       Aventureiro aventureiroEncontrado = aventureiroSemCompanheiro.get();
 
+      if (companheiro.getNome().isBlank() || companheiro.getNome().isEmpty())
+        throw new CompanheiroInvalidParamsException();
+
+      if (companheiro.getLealdade() < 0 || companheiro.getLealdade() > 100)
+        throw new CompanheiroInvalidParamsException();
+
       if (aventureiroEncontrado.getCompanheiro() == null) {
         aventureiroEncontrado.setCompanheiro(companheiro);
         return companheiro;
-      } else {
-        return aventureiroEncontrado.getCompanheiro();
       }
+
+      return aventureiroEncontrado.getCompanheiro();
+
     }
-    return null;
+    throw new AventureiroNotFoundException();
+  }
+
+  public Aventureiro removerCompanheiro(UUID id) {
+    Optional<Aventureiro> aventureiroComCompanheiro = buscarAventureiroPorId(id);
+
+    if (aventureiroComCompanheiro.isPresent()) {
+      Aventureiro aventureiroEncontrado = aventureiroComCompanheiro.get();
+
+      if (aventureiroEncontrado.getCompanheiro() != null)
+        aventureiroEncontrado.setCompanheiro(null);
+
+      return aventureiroEncontrado;
+    }
+
+    throw new AventureiroNotFoundException();
+
   }
 }
