@@ -3,7 +3,6 @@ package com.edu.infnet.tp1.controllers;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,12 +15,14 @@ import com.edu.infnet.tp1.services.ListarAventureirosService;
 import com.edu.infnet.tp1.shared.dtos.PaginationQueryDto;
 import com.edu.infnet.tp1.shared.dtos.PaginationResponseDto;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/api/aventureiros")
+@RequiredArgsConstructor
 public class ListarAventureirosController {
 
-  @Autowired
-  ListarAventureirosService listarAventureirosService;
+  private final ListarAventureirosService listarAventureirosService;
 
   @GetMapping()
   public ResponseEntity<?> listarAventureiros(
