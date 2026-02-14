@@ -3,6 +3,7 @@
 # Captura o ID na hora de registrar um aventureiro para reutilizar dinamicamente.
 @ID = {{Registrar_Aventureiro.response.body.id}} 
 
+# @name HealthCheck
 GET {{BASE_URL}}/health
 
 ###
@@ -11,26 +12,27 @@ POST {{BASE_URL}}/aventureiros/create
 Content-Type: application/json
 
 {
-  "nome": "Patolino",
-  "classe": "MAGO",
+  "nome": "Pica Pau",
+  "classe": "LADINO",
   "nivel":10 ,
   "companheiro": null
 }
 
 ###
 
-
+# @name Buscar_Aventureiro_Por_ID
 GET {{BASE_URL}}/aventureiros/{{ID}}
 
 ###
 
+# @name Listar_Aventureiros
 # Query Params 👇
 # ?page=0&size=10&classe=MAGO&ativo=true&nivel=1
-GET {{BASE_URL}}/aventureiros?page=0&size=10&classe=MAGO&ativo=true&nivelMinimo=1
+GET {{BASE_URL}}/aventureiros?page=0&size=10&classe=GUERREIRO&ativo=true&nivelMinimo=1
 
 ###
 
-
+# @name Atualizar_Aventureiro
 PATCH  {{BASE_URL}}/aventureiros/{{ID}}
 Content-Type: application/json
 
@@ -42,11 +44,17 @@ Content-Type: application/json
 
 ###
 
+# @name Definir_Companheiro
 POST {{BASE_URL}}/companheiros/create/{{ID}}
 Content-Type: application/json
 
 {
-"nome": "Esquisito",
-"especie": "LOBO", 
-"lealdade": 50 
+"nome": "Oddy",
+"especie": "CORUJA", 
+"lealdade": 70
 }
+###
+
+# @name Remover_Companheiro
+DELETE {{BASE_URL}}/companheiros/delete/{{ID}}
+Content-Type: application/json
