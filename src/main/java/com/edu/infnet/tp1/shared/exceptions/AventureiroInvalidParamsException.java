@@ -4,7 +4,7 @@ package com.edu.infnet.tp1.shared.exceptions;
 public class AventureiroInvalidParamsException extends RuntimeException {
 
   public AventureiroInvalidParamsException() {
-    super("Parametros inválidos");
+    super("Parametros de Aventureiro inválidos");
   }
 
   // Instancia a mensagem customizada
