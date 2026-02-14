@@ -79,7 +79,7 @@ Valide se está rodando em `http://localhost:8080/api/health`
 | 5   | Encerrar vínculo com a guilda  | `PATCH`  | `/api/aventureiro/{id}`    | ⬜ Pendente     |
 | 6   | Recrutar novamente             | `PATCH`  | `—`                        | ⬜ Pendente     |
 | 7   | Definir/substituir companheiro | `POST`   | `/api/companheiros/{id}`   | ✅ Implementado |
-| 8   | Remover companheiro            | `DELETE` | `/api/companheiros/{id}`   | ⬜ Pendente     |
+| 8   | Remover companheiro            | `DELETE` | `/api/companheiros/{id}`   | ✅ Implementado |
 
 ---
 
