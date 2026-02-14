@@ -6,10 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
 @AllArgsConstructor
 public class Companheiro {
   private String nome;
   private Especies especie;
-  private Number lealdade;
+  private Integer lealdade;
 }
