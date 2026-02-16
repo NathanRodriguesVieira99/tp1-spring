@@ -72,14 +72,14 @@ Valide se está rodando em `http://localhost:8080/api/health`
 
 | #   | Operação                       | Método   | Rota                                    | Status          |
 | --- | ------------------------------ | -------- | --------------------------------------- | --------------- |
-| 1   | Registrar aventureiro          | `POST`   | `/api/aventureiros/create`              | ✅ Implementado |
-| 2   | Listar aventureiros            | `GET`    | `/api/aventureiros`                     | ✅ Implementado |
-| 3   | Consultar aventureiro por ID   | `GET`    | `/api/aventureiros/{id}`                | ✅ Implementado |
-| 4   | Atualizar dados do aventureiro | `PATCH`  | `/api/aventureiros/{id}`                | ✅ Implementado |
-| 5   | Encerrar vínculo com a guilda  | `PATCH`  | `/api/aventureiros/guilda/remove/{id}`  | ✅ Implementado |
-| 6   | Recrutar novamente             | `PATCH`  | `/api/aventureiros/guilda/recruit/{id}` | ✅ Implementado |
-| 7   | Definir/substituir companheiro | `POST`   | `/api/companheiros/create/{id}`         | ✅ Implementado |
-| 8   | Remover companheiro            | `DELETE` | `/api/companheiros/delete/{id}`         | ✅ Implementado |
+| 1   | Registrar aventureiro          | `POST`   | `/api/aventureiros/create`             | ✅ Implementado |
+| 2   | Listar aventureiros            | `GET`    | `/api/aventureiros`                    | ✅ Implementado |
+| 3   | Consultar aventureiro por ID   | `GET`    | `/api/aventureiros/{id}`               | ✅ Implementado |
+| 4   | Atualizar dados do aventureiro | `PATCH`  | `/api/aventureiros/{id}`               | ✅ Implementado |
+| 5   | Encerrar vínculo com a guilda  | `PATCH`  | `/api/aventureiros/guilda/remove/{id}` | ✅ Implementado |
+| 6   | Recrutar novamente             | `PATCH`  | `/api/aventureiros/guilda/recruit/{id}`| ✅ Implementado |
+| 7   | Definir/substituir companheiro | `POST`   | `/api/companheiros/create/{id}`        | ✅ Implementado |
+| 8   | Remover companheiro            | `DELETE` | `/api/companheiros/delete/{id}`        | ✅ Implementado |
 
 ---
 
