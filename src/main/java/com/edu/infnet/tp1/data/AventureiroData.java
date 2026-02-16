@@ -149,4 +149,38 @@ public class AventureiroData {
     throw new AventureiroNotFoundException();
 
   }
+
+  public Aventureiro encerrarVinculoGuilda(UUID id) {
+    Optional<Aventureiro> aventureiroAtivo = buscarAventureiroPorId(id);
+
+    if (aventureiroAtivo.isPresent()) {
+      Aventureiro aventureiroEncontrado = aventureiroAtivo.get();
+
+      if (aventureiroEncontrado.getAtivo() == true) {
+        aventureiroEncontrado.setAtivo(false);
+
+        return aventureiroEncontrado;
+      }
+
+    }
+
+    throw new AventureiroNotFoundException();
+  }
+
+  public Aventureiro recrutarNovamente(UUID id) {
+    Optional<Aventureiro> aventureiroInativo = buscarAventureiroPorId(id);
+
+    if (aventureiroInativo.isPresent()) {
+      Aventureiro aventureiroEncontrado = aventureiroInativo.get();
+
+      if (aventureiroEncontrado.getAtivo() == false) {
+        aventureiroEncontrado.setAtivo(true);
+
+        return aventureiroEncontrado;
+      }
+
+    }
+
+    throw new AventureiroNotFoundException();
+  }
 }
