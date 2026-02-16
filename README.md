@@ -70,16 +70,16 @@ Valide se está rodando em `http://localhost:8080/api/health`
 
 ### Visão geral
 
-| #   | Operação                       | Método   | Rota                       | Status          |
-| --- | ------------------------------ | -------- | -------------------------- | --------------- |
-| 1   | Registrar aventureiro          | `POST`   | `/api/aventureiros/create` | ✅ Implementado |
-| 2   | Listar aventureiros            | `GET`    | `/api/aventureiros`        | ✅ Implementado |
-| 3   | Consultar aventureiro por ID   | `GET`    | `/api/aventureiros/{id}`   | ✅ Implementado |
-| 4   | Atualizar dados do aventureiro | `PATCH`  | `/api/aventureiros/{id}`   | ✅ Implementado |
-| 5   | Encerrar vínculo com a guilda  | `PATCH`  | `/api/aventureiro/{id}`    | ⬜ Pendente     |
-| 6   | Recrutar novamente             | `PATCH`  | `—`                        | ⬜ Pendente     |
-| 7   | Definir/substituir companheiro | `POST`   | `/api/companheiros/{id}`   | ✅ Implementado |
-| 8   | Remover companheiro            | `DELETE` | `/api/companheiros/{id}`   | ✅ Implementado |
+| #   | Operação                       | Método   | Rota                                    | Status          |
+| --- | ------------------------------ | -------- | --------------------------------------- | --------------- |
+| 1   | Registrar aventureiro          | `POST`   | `/api/aventureiros/create`              | ✅ Implementado |
+| 2   | Listar aventureiros            | `GET`    | `/api/aventureiros`                     | ✅ Implementado |
+| 3   | Consultar aventureiro por ID   | `GET`    | `/api/aventureiros/{id}`                | ✅ Implementado |
+| 4   | Atualizar dados do aventureiro | `PATCH`  | `/api/aventureiros/{id}`                | ✅ Implementado |
+| 5   | Encerrar vínculo com a guilda  | `PATCH`  | `/api/aventureiros/guilda/remove/{id}`  | ✅ Implementado |
+| 6   | Recrutar novamente             | `PATCH`  | `/api/aventureiros/guilda/recruit/{id}` | ✅ Implementado |
+| 7   | Definir/substituir companheiro | `POST`   | `/api/companheiros/create/{id}`         | ✅ Implementado |
+| 8   | Remover companheiro            | `DELETE` | `/api/companheiros/delete/{id}`         | ✅ Implementado |
 
 ---
 
@@ -101,6 +101,22 @@ Registra um novo aventureiro na guilda.
   "nome": "Patolino",
   "classe": "MAGO",
   "nivel": 10,
+  "companheiro": null
+}
+```
+
+</details>
+
+<details>
+<summary><strong>Response Body</strong></summary>
+
+```json
+{
+  "id": "75ab4bfb-7cb7-4f4a-a2a7-8f1f4f855337",
+  "nome": "Patolino",
+  "classe": "MAGO",
+  "nivel": 10,
+  "ativo": true,
   "companheiro": null
 }
 ```
@@ -205,6 +221,26 @@ Retorna todas as informações do aventureiro, incluindo o companheiro.
 GET /api/aventureiros/75ab4bfb-7cb7-4f4a-a2a7-8f1f4f855337
 ```
 
+<details>
+<summary><strong>Response Body</strong></summary>
+
+```json
+{
+  "id": "75ab4bfb-7cb7-4f4a-a2a7-8f1f4f855337",
+  "nome": "Filipe",
+  "classe": "GUERREIRO",
+  "nivel": 42,
+  "ativo": true,
+  "companheiro": {
+    "nome": "Felpudo",
+    "especie": "LOBO",
+    "lealdade": 85
+  }
+}
+```
+
+</details>
+
 ---
 
 ### 4️⃣ Atualizar dados do aventureiro
@@ -231,6 +267,22 @@ Atualiza parcialmente os dados de um aventureiro existente.
 
 </details>
 
+<details>
+<summary><strong>Response Body</strong></summary>
+
+```json
+{
+  "id": "da8411c2-717a-4236-8f92-8d5930c8d66b",
+  "nome": "Perna Longa",
+  "classe": "GUERREIRO",
+  "nivel": 30,
+  "ativo": true,
+  "companheiro": null
+}
+```
+
+</details>
+
 **Regras:**
 
 - Apenas `nome`, `classe` e `nivel` podem ser atualizados
@@ -239,24 +291,52 @@ Atualiza parcialmente os dados de um aventureiro existente.
 
 ---
 
-### 5️⃣ Encerrar vínculo com a guilda _(pendente)_
+### 5️⃣ Encerrar vínculo com a guilda
 
 Altera o estado do aventureiro para `ativo = false`. O aventureiro permanece registrado no sistema.
 
-|            |                         |
-| ---------- | ----------------------- |
-| **Método** | `PATCH`                 |
-| **Rota**   | `/api/aventureiro/{id}` |
+|             |                                                                      |
+| ----------- | -------------------------------------------------------------------- |
+| **Método**  | `PATCH`                                                              |
+| **Rota**    | `/api/aventureiros/guilda/remove/{id}`                               |
+| **Sucesso** | `200 OK` — retorna o aventureiro atualizado                          |
+| **Erro**    | `400 Bad Request` (UUID inválido) · `404 Not Found` (não encontrado) |
+
+**Exemplo (curl):**
+
+```bash
+curl -i -X PATCH "http://localhost:8080/api/aventureiros/guilda/remove/f47ac10b-58cc-4372-a567-0e02b2c3d479"
+```
+
+**Comportamento:**
+
+- Se o `id` for válido e o aventureiro estiver `ativo`, o campo `ativo` será definido como `false` e o recurso atualizado será retornado.
+- Se o `id` estiver ausente na rota o endpoint não será casado (HTTP 404 no roteamento); para evitar isso, envie sempre o `id` na URL.
+- Se o `id` tiver formato inválido o servidor responde `400 Bad Request`.
 
 ---
 
-### 6️⃣ Recrutar novamente _(pendente)_
+### 6️⃣ Recrutar novamente
 
-Altera o estado do aventureiro para `ativo = true`.
+Reativa um aventureiro previamente removido da guilda (define `ativo = true`).
 
-|            |         |
-| ---------- | ------- |
-| **Método** | `PATCH` |
+|             |                                                                      |
+| ----------- | -------------------------------------------------------------------- |
+| **Método**  | `PATCH`                                                              |
+| **Rota**    | `/api/aventureiros/guilda/recruit/{id}`                              |
+| **Sucesso** | `200 OK` — retorna o aventureiro atualizado                          |
+| **Erro**    | `400 Bad Request` (UUID inválido) · `404 Not Found` (não encontrado) |
+
+**Exemplo (curl):**
+
+```bash
+curl -i -X PATCH "http://localhost:8080/api/aventureiros/guilda/recruit/f47ac10b-58cc-4372-a567-0e02b2c3d479"
+```
+
+**Comportamento:**
+
+- Se o `id` for válido e o aventureiro estiver `ativo = false`, o campo `ativo` será definido como `true` e o recurso atualizado será retornado.
+- Se o `id` não for encontrado, retorna `404 Not Found`.
 
 ---
 
@@ -264,10 +344,12 @@ Altera o estado do aventureiro para `ativo = true`.
 
 Cria ou substitui o companheiro associado a um aventureiro.
 
-|            |                          |
-| ---------- | ------------------------ |
-| **Método** | `POST`                   |
-| **Rota**   | `/api/companheiros/{id}` |
+|             |                            |
+| ----------- | -------------------------- |
+| **Método**  | `POST`                     |
+| **Rota**    | `/api/companheiros/create/{id}` |
+| **Sucesso** | `201 Created` — retorna o `companheiro` criado |
+| **Erro**    | `400 Bad Request` (params inválidos) · `404 Not Found` (aventureiro não encontrado) |
 
 <details>
 <summary><strong>Request Body esperado</strong></summary>
@@ -282,16 +364,42 @@ Cria ou substitui o companheiro associado a um aventureiro.
 
 </details>
 
+<details>
+<summary><strong>Response Body</strong></summary>
+
+```json
+{
+  "nome": "Felpudo",
+  "especie": "LOBO",
+  "lealdade": 85
+}
+```
+
+</details>
+
 ---
 
-### 8️⃣ Remover companheiro _(pendente)_
+### 8️⃣ Remover companheiro
 
-Remove o companheiro associado ao aventureiro.
+Remove o companheiro associado ao aventureiro e retorna o aventureiro atualizado.
 
-|            |                          |
-| ---------- | ------------------------ |
-| **Método** | `DELETE`                 |
-| **Rota**   | `/api/companheiros/{id}` |
+|             |                                                                      |
+| ----------- | -------------------------------------------------------------------- |
+| **Método**  | `DELETE`                                                             |
+| **Rota**    | `/api/companheiros/delete/{id}`                                      |
+| **Sucesso** | `200 OK` — retorna o aventureiro sem o `companheiro`                 |
+| **Erro**    | `400 Bad Request` (UUID inválido) · `404 Not Found` (não encontrado) |
+
+**Exemplo (curl):**
+
+```bash
+curl -i -X DELETE "http://localhost:8080/api/companheiros/delete/f47ac10b-58cc-4372-a567-0e02b2c3d479"
+```
+
+**Comportamento:**
+
+- Se o `id` for válido e o aventureiro possuir um companheiro, o campo `companheiro` será definido como `null` e o aventureiro atualizado será retornado.
+- Se o `id` não existir, retorna `404 Not Found`.
 
 ---
 
@@ -380,4 +488,5 @@ src/main/java/com/edu/infnet/tp1/
 - **Sem banco de dados** — os dados são armazenados em `ArrayList` em memória (`AventureiroData`)
 - A lista é inicializada com **100 aventureiros** da classe `GUERREIRO` ao iniciar a aplicação
 - Arquitetura: **1 Controller + 1 Service por operação**
-****
+
+---
