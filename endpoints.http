@@ -58,3 +58,13 @@ Content-Type: application/json
 # @name Remover_Companheiro
 DELETE {{BASE_URL}}/companheiros/delete/{{ID}}
 Content-Type: application/json
+
+###
+
+# @name Encerrar_Vínculo_Guilda
+PATCH {{BASE_URL}}/aventureiros/guilda/remove/{{ID}}
+
+###
+
+# @name Recrutar_Novamente
+PATCH {{BASE_URL}}/aventureiros/guilda/recruit/{{ID}}
