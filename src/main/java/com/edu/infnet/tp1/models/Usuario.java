@@ -26,7 +26,7 @@ public class Usuario {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
-  private Integer id;
+  private Long id;
 
   @Column(name = "nome", nullable = false)
   private String nome;
@@ -56,6 +56,6 @@ public class Usuario {
 
   // N usuários para N roles
   @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(schema = "audit", name = "usaurios_roles", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+  @JoinTable(schema = "audit", name = "user_roles", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
 }
