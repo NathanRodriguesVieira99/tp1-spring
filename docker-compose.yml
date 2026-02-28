@@ -1,0 +1,15 @@
+volumes:
+  pgdata:
+
+services:
+  postgresql:
+    container_name: tp2_spring_boot
+    image: leogloriainfnet/postgres-tp2-spring:1.0
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: usuario
+      POSTGRES_PASSWORD: senha
+      POSTGRES_DB: tp2_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
