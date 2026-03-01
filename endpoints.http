@@ -79,7 +79,7 @@ PATCH {{BASE_URL}}/aventureiros/guilda/recruit/{{ID}}
 ###
 
 # @name Buscar_Aventureiro_Por_Nome
-GET {{BASE_URL}}/aventureiros/buscar?nome=Pica&page=0&size=10
+GET {{BASE_URL}}/aventureiros/buscar?nome=Perna&page=0&size=10
 
 ###
 
@@ -89,6 +89,8 @@ GET {{BASE_URL}}/aventureiros/{{ID}}/detalhes
 ###
 
 # @name Listar_Missoes
+# Query Params 👇
+# ?page=0&size=10&status=EM_ANDAMENTO&nivelPerigo=ALTO
 GET {{BASE_URL}}/missoes?page=0&size=10
 
 ###
