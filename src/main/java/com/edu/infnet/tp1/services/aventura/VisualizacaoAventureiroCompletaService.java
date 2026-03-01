@@ -19,18 +19,13 @@ public class VisualizacaoAventureiroCompletaService {
   private final ParticipacaoMissaoRepository participacaoRepository;
 
   public AventureiroDetalhesDto exec(Long id) {
-    Aventureiro aventureiro = aventureiroRepository.findById(id)
+    Aventureiro aventureiro = aventureiroRepository.findByIdComCompanheiro(id)
         .orElseThrow(AventureiroNotFoundException::new);
 
-    int totalParticipacoes = (int) participacaoRepository.findAll().stream()
-        .filter(p -> p.getAventureiro().getId().equals(id))
-        .count();
+    int totalParticipacoes = (int) participacaoRepository.countByAventureiroId(id);
 
-    String ultimaMissao = participacaoRepository.findAll().stream()
-        .filter(p -> p.getAventureiro().getId().equals(id))
-        .map(p -> p.getMissao().getTitulo())
-        .findFirst()
-        .orElse(null);
+    var participacoes = participacaoRepository.findByAventureiroIdOrderByCreatedAtDesc(id);
+    String ultimaMissao = participacoes.isEmpty() ? null : participacoes.get(0).getMissao().getTitulo();
 
     CompanheiroResponseDto companheiroDto = null;
     if (aventureiro.getCompanheiro() != null) {
