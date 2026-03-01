@@ -13,3 +13,15 @@ services:
       POSTGRES_DB: tp2_db
     volumes:
       - pgdata:/var/lib/postgresql/data
+      
+  postgresql_test:
+    container_name: tp2_spring_boot_test
+    image: leogloriainfnet/postgres-tp2-spring:1.0
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: usuario_test
+      POSTGRES_PASSWORD: senha_test
+      POSTGRES_DB: tp2_test_db
+    volumes:
+      - pgdata_test:/var/lib/postgresql/data
