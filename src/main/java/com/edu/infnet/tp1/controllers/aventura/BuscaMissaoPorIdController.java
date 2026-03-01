@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.edu.infnet.tp1.models.aventura.Missao;
 import com.edu.infnet.tp1.services.aventura.BuscaMissaoPorIdService;
+import com.edu.infnet.tp1.shared.dtos.MissaoDetalhesDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +19,7 @@ public class BuscaMissaoPorIdController {
   private final BuscaMissaoPorIdService service;
 
   @GetMapping("/{id}/detalhes")
-  public ResponseEntity<Missao> detalhes(@PathVariable Long id) {
-    return ResponseEntity.ok(service.exec(id));
+  public ResponseEntity<MissaoDetalhesDto> detalhes(@PathVariable Long id) {
+    return ResponseEntity.ok(service.execComDetalhes(id));
   }
 }
