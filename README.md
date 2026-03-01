@@ -1,9 +1,10 @@
 # ⚔️ TP1 Spring Boot
 
-> API REST para o Registro Oficial da Guilda de Aventureiros — dados em memória, sem banco externo.
+> API REST para o Registro Oficial da Guilda de Aventureiros — integração com PostgreSQL e domínio de Aventuras & Missões.
 
 ![Java](https://img.shields.io/badge/Java-21-orange?logo=openjdk)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.2-brightgreen?logo=springboot)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-blue?logo=postgresql)
 ![Lombok](https://img.shields.io/badge/Lombok-enabled-blue)
 
 ---
@@ -13,7 +14,6 @@
 - [Como executar](#-como-executar)
 - [Conceitos do Domínio](#-conceitos-do-domínio)
 - [Rotas da API](#-rotas-da-api)
-- [Arquivo de testes HTTP](#-arquivo-de-testes-http)
 - [Padrão de Erro](#-padrão-de-erro)
 - [Estrutura do Projeto](#-estrutura-do-projeto)
 - [Observações](#-observações)
@@ -22,14 +22,20 @@
 
 ## 🚀 Como executar
 
-**Pré-requisitos:** Java 21+
+**Pré-requisitos:**
+
+- Java 21+
+- Docker & Docker Compose
 
 ```bash
 # Clonar o repositório
 git clone <repo-url>
 cd tp1-spring
 
-# Execute (pela IDE) ou via terminal
+# Inicie o banco de dados (PostgreSQL)
+docker-compose up -d
+
+# Execute a aplicação (pela IDE) ou via terminal
 ./mvnw spring-boot:run
 ```
 
@@ -45,10 +51,10 @@ Valide se está rodando em `http://localhost:8080/api/health`
 
 | Campo         | Tipo       | Obrigatório         | Descrição             |
 | ------------- | ---------- | ------------------- | --------------------- |
-| `id`          | `UUID`     | Gerado pelo sistema | Identificador único   |
+| `id`          | `Long`     | Gerado pelo sistema | Identificador único   |
 | `nome`        | `String`   | Sim                 | Nome do aventureiro   |
 | `classe`      | `Enum`     | Sim                 | Classe do aventureiro |
-| `nivel`       | `Number`   | Sim                 | Nível (≥ 1)           |
+| `nivel`       | `Integer`  | Sim                 | Nível (≥ 1)           |
 | `ativo`       | `Boolean`  | Auto (`true`)       | Status na guilda      |
 | `companheiro` | `Optional` | Não                 | Companheiro associado |
 
@@ -64,6 +70,28 @@ Valide se está rodando em `http://localhost:8080/api/health`
 
 **Espécies permitidas:** `LOBO` · `CORUJA` · `GOLEM` · `DRAGAO_MINIATURA`
 
+### Missão
+
+| Campo         | Tipo     | Obrigatório | Descrição                              |
+| ------------- | -------- | ----------- | -------------------------------------- |
+| `id`          | `Long`   | Gerado      | Identificador único                    |
+| `titulo`      | `String` | Sim         | Título da missão                       |
+| `status`      | `Enum`   | Sim         | Status (ABERTA/EM_PROGRESSO/CONCLUIDA) |
+| `nivelPerigo` | `Enum`   | Sim         | Nível (BAIXO/MEDIO/ALTO/CRITICO)       |
+| `dataInicio`  | `Date`   | Não         | Data de início da missão               |
+| `dataTermino` | `Date`   | Não         | Data de término da missão              |
+
+### Participação em Missão
+
+| Campo            | Tipo          | Obrigatório | Descrição                     |
+| ---------------- | ------------- | ----------- | ----------------------------- |
+| `id`             | `Long`        | Gerado      | Identificador único           |
+| `missao`         | `Missao`      | Sim         | Referência à missão           |
+| `aventureiro`    | `Aventureiro` | Sim         | Aventureiro participante      |
+| `papel`          | `Enum`        | Sim         | Papel (LIDER/MEMBRO/SUPORTE)  |
+| `recompensaOuro` | `BigDecimal`  | Não         | Ouro recebido como recompensa |
+| `destaque`       | `Boolean`     | Auto        | Se teve performance destaque  |
+
 ---
 
 ## 📡 Rotas da API
@@ -72,14 +100,20 @@ Valide se está rodando em `http://localhost:8080/api/health`
 
 | #   | Operação                       | Método   | Rota                                    | Status          |
 | --- | ------------------------------ | -------- | --------------------------------------- | --------------- |
-| 1   | Registrar aventureiro          | `POST`   | `/api/aventureiros/create`             | ✅ Implementado |
-| 2   | Listar aventureiros            | `GET`    | `/api/aventureiros`                    | ✅ Implementado |
-| 3   | Consultar aventureiro por ID   | `GET`    | `/api/aventureiros/{id}`               | ✅ Implementado |
-| 4   | Atualizar dados do aventureiro | `PATCH`  | `/api/aventureiros/{id}`               | ✅ Implementado |
-| 5   | Encerrar vínculo com a guilda  | `PATCH`  | `/api/aventureiros/guilda/remove/{id}` | ✅ Implementado |
-| 6   | Recrutar novamente             | `PATCH`  | `/api/aventureiros/guilda/recruit/{id}`| ✅ Implementado |
-| 7   | Definir/substituir companheiro | `POST`   | `/api/companheiros/create/{id}`        | ✅ Implementado |
-| 8   | Remover companheiro            | `DELETE` | `/api/companheiros/delete/{id}`        | ✅ Implementado |
+| 1   | Registrar aventureiro          | `POST`   | `/api/aventureiros/create`              | ✅ Implementado |
+| 2   | Listar aventureiros            | `GET`    | `/api/aventureiros`                     | ✅ Implementado |
+| 3   | Consultar aventureiro por ID   | `GET`    | `/api/aventureiros/{id}`                | ✅ Implementado |
+| 4   | Atualizar dados do aventureiro | `PATCH`  | `/api/aventureiros/{id}`                | ✅ Implementado |
+| 5   | Encerrar vínculo com a guilda  | `PATCH`  | `/api/aventureiros/guilda/remove/{id}`  | ✅ Implementado |
+| 6   | Recrutar novamente             | `PATCH`  | `/api/aventureiros/guilda/recruit/{id}` | ✅ Implementado |
+| 7   | Definir/substituir companheiro | `POST`   | `/api/companheiros/create/{id}`         | ✅ Implementado |
+| 8   | Remover companheiro            | `DELETE` | `/api/companheiros/delete/{id}`         | ✅ Implementado |
+| 9   | Buscar aventureiro por nome    | `GET`    | `/api/aventureiros/buscar?nome=...`     | ✅ Implementado |
+| 10  | Detalhes completo aventureiro  | `GET`    | `/api/aventureiros/{id}/detalhes`       | ✅ Implementado |
+| 11  | Listar missões                 | `GET`    | `/api/missoes`                          | ✅ Implementado |
+| 12  | Detalhes de uma missão         | `GET`    | `/api/missoes/{id}/detalhes`            | ✅ Implementado |
+| 13  | Ranking de participação        | `GET`    | `/api/aventureiros/ranking`             | ✅ Implementado |
+| 14  | Relatório de missões           | `GET`    | `/api/missoes/relatorio`                | ✅ Implementado |
 
 ---
 
@@ -218,7 +252,7 @@ Retorna todas as informações do aventureiro, incluindo o companheiro.
 **Exemplo:**
 
 ```
-GET /api/aventureiros/75ab4bfb-7cb7-4f4a-a2a7-8f1f4f855337
+GET /api/aventureiros/1
 ```
 
 <details>
@@ -226,12 +260,13 @@ GET /api/aventureiros/75ab4bfb-7cb7-4f4a-a2a7-8f1f4f855337
 
 ```json
 {
-  "id": "75ab4bfb-7cb7-4f4a-a2a7-8f1f4f855337",
+  "id": 1,
   "nome": "Filipe",
   "classe": "GUERREIRO",
   "nivel": 42,
   "ativo": true,
   "companheiro": {
+    "id": 1,
     "nome": "Felpudo",
     "especie": "LOBO",
     "lealdade": 85
@@ -272,7 +307,7 @@ Atualiza parcialmente os dados de um aventureiro existente.
 
 ```json
 {
-  "id": "da8411c2-717a-4236-8f92-8d5930c8d66b",
+  "id": 2,
   "nome": "Perna Longa",
   "classe": "GUERREIRO",
   "nivel": 30,
@@ -305,7 +340,7 @@ Altera o estado do aventureiro para `ativo = false`. O aventureiro permanece reg
 **Exemplo (curl):**
 
 ```bash
-curl -i -X PATCH "http://localhost:8080/api/aventureiros/guilda/remove/f47ac10b-58cc-4372-a567-0e02b2c3d479"
+curl -i -X PATCH "http://localhost:8080/api/aventureiros/guilda/remove/1"
 ```
 
 **Comportamento:**
@@ -330,7 +365,7 @@ Reativa um aventureiro previamente removido da guilda (define `ativo = true`).
 **Exemplo (curl):**
 
 ```bash
-curl -i -X PATCH "http://localhost:8080/api/aventureiros/guilda/recruit/f47ac10b-58cc-4372-a567-0e02b2c3d479"
+curl -i -X PATCH "http://localhost:8080/api/aventureiros/guilda/recruit/1"
 ```
 
 **Comportamento:**
@@ -344,11 +379,11 @@ curl -i -X PATCH "http://localhost:8080/api/aventureiros/guilda/recruit/f47ac10b
 
 Cria ou substitui o companheiro associado a um aventureiro.
 
-|             |                            |
-| ----------- | -------------------------- |
-| **Método**  | `POST`                     |
-| **Rota**    | `/api/companheiros/create/{id}` |
-| **Sucesso** | `201 Created` — retorna o `companheiro` criado |
+|             |                                                                                     |
+| ----------- | ----------------------------------------------------------------------------------- |
+| **Método**  | `POST`                                                                              |
+| **Rota**    | `/api/companheiros/create/{id}`                                                     |
+| **Sucesso** | `201 Created` — retorna o `companheiro` criado                                      |
 | **Erro**    | `400 Bad Request` (params inválidos) · `404 Not Found` (aventureiro não encontrado) |
 
 <details>
@@ -393,13 +428,264 @@ Remove o companheiro associado ao aventureiro e retorna o aventureiro atualizado
 **Exemplo (curl):**
 
 ```bash
-curl -i -X DELETE "http://localhost:8080/api/companheiros/delete/f47ac10b-58cc-4372-a567-0e02b2c3d479"
+curl -i -X DELETE "http://localhost:8080/api/companheiros/delete/1"
 ```
 
 **Comportamento:**
 
 - Se o `id` for válido e o aventureiro possuir um companheiro, o campo `companheiro` será definido como `null` e o aventureiro atualizado será retornado.
 - Se o `id` não existir, retorna `404 Not Found`.
+
+---
+
+### 9️⃣ Buscar aventureiro por nome
+
+Busca aventureiros usando filtro textual parcial no nome.
+
+|             |                            |
+| ----------- | -------------------------- |
+| **Método**  | `GET`                      |
+| **Rota**    | `/api/aventureiros/buscar` |
+| **Sucesso** | `200 OK`                   |
+
+| Param  | Tipo     | Obrigatório | Descrição                  |
+| ------ | -------- | ----------- | -------------------------- |
+| `nome` | `String` | Sim         | Termo de busca parcial     |
+| `page` | `int`    | Não         | Página (default: 0)        |
+| `size` | `int`    | Não         | Itens/página (default: 10) |
+
+**Exemplo:**
+
+```
+GET /api/aventureiros/buscar?nome=Filipe&page=0&size=10
+```
+
+<details>
+<summary><strong>Response Body</strong></summary>
+
+```json
+{
+  "content": [
+    {
+      "id": 1,
+      "nome": "Filipe",
+      "classe": "GUERREIRO",
+      "nivel": 42,
+      "ativo": true,
+      "companheiro": {
+        "id": 1,
+        "nome": "Felpudo",
+        "especie": "LOBO",
+        "lealdade": 85
+      }
+    }
+  ],
+  "totalElements": 1,
+  "totalPages": 1,
+  "currentPage": 0
+}
+```
+
+</details>
+
+---
+
+### 1️⃣0️⃣ Detalhes completo do aventureiro
+
+Retorna informações completas incluindo total de participações em missões e a última missão em que participou.
+
+|             |                                              |
+| ----------- | -------------------------------------------- |
+| **Método**  | `GET`                                        |
+| **Rota**    | `/api/aventureiros/{id}/detalhes`            |
+| **Sucesso** | `200 OK`                                     |
+| **Erro**    | `404 Not Found` — aventureiro não encontrado |
+
+**Exemplo:**
+
+```
+GET /api/aventureiros/1/detalhes
+```
+
+<details>
+<summary><strong>Response Body</strong></summary>
+
+```json
+{
+  "id": 1,
+  "nome": "Filipe",
+  "classe": "GUERREIRO",
+  "nivel": 42,
+  "ativo": true,
+  "companheiro": {
+    "id": 1,
+    "nome": "Felpudo",
+    "especie": "LOBO",
+    "lealdade": 85
+  },
+  "totalParticipacoes": 15,
+  "ultimaMissao": "Explorar a Caverna Escura"
+}
+```
+
+</details>
+
+---
+
+### 1️⃣1️⃣ Listar missões
+
+Lista todas as missões com paginação.
+
+|             |                |
+| ----------- | -------------- |
+| **Método**  | `GET`          |
+| **Rota**    | `/api/missoes` |
+| **Sucesso** | `200 OK`       |
+
+| Param  | Tipo  | Obrigatório | Descrição                  |
+| ------ | ----- | ----------- | -------------------------- |
+| `page` | `int` | Não         | Página (default: 0)        |
+| `size` | `int` | Não         | Itens/página (default: 10) |
+
+**Exemplo:**
+
+```
+GET /api/missoes?page=0&size=10
+```
+
+<details>
+<summary><strong>Response Body</strong></summary>
+
+```json
+{
+  "content": [
+    {
+      "id": 1,
+      "titulo": "Explorar a Caverna Escura",
+      "status": "CONCLUIDA",
+      "nivelPerigo": "ALTO"
+    },
+    {
+      "id": 2,
+      "titulo": "Derrotar o Dragão de Fogo",
+      "status": "ATIVA",
+      "nivelPerigo": "CRITICO"
+    }
+  ],
+  "totalElements": 2,
+  "totalPages": 1,
+  "currentPage": 0
+}
+```
+
+</details>
+
+---
+
+### 1️⃣2️⃣ Detalhes de uma missão
+
+Retorna informações completas de uma missão.
+
+|             |                                         |
+| ----------- | --------------------------------------- |
+| **Método**  | `GET`                                   |
+| **Rota**    | `/api/missoes/{id}/detalhes`            |
+| **Sucesso** | `200 OK`                                |
+| **Erro**    | `404 Not Found` — missão não encontrada |
+
+**Exemplo:**
+
+```
+GET /api/missoes/1/detalhes
+```
+
+<details>
+<summary><strong>Response Body</strong></summary>
+
+```json
+{
+  "id": 1,
+  "titulo": "Explorar a Caverna Escura",
+  "status": "CONCLUIDA",
+  "nivelPerigo": "ALTO"
+}
+```
+
+</details>
+
+---
+
+### 1️⃣3️⃣ Ranking de participação
+
+Retorna ranking de aventureiros por participações, recompensas e destaques.
+
+|             |                             |
+| ----------- | --------------------------- |
+| **Método**  | `GET`                       |
+| **Rota**    | `/api/aventureiros/ranking` |
+| **Sucesso** | `200 OK`                    |
+
+<details>
+<summary><strong>Response Body</strong></summary>
+
+```json
+[
+  {
+    "aventureiroId": 1,
+    "nome": "Filipe",
+    "totalParticipacoes": 15,
+    "somaRecompensas": "7500.00",
+    "totalDestaques": 5
+  },
+  {
+    "aventureiroId": 2,
+    "nome": "Perna Longa",
+    "totalParticipacoes": 12,
+    "somaRecompensas": "6000.00",
+    "totalDestaques": 3
+  }
+]
+```
+
+</details>
+
+---
+
+### 1️⃣4️⃣ Relatório de missões
+
+Retorna relatório agregado de missões com estatísticas por missão.
+
+|             |                          |
+| ----------- | ------------------------ |
+| **Método**  | `GET`                    |
+| **Rota**    | `/api/missoes/relatorio` |
+| **Sucesso** | `200 OK`                 |
+
+<details>
+<summary><strong>Response Body</strong></summary>
+
+```json
+[
+  {
+    "id": 1,
+    "titulo": "Explorar a Caverna Escura",
+    "status": "CONCLUIDA",
+    "nivelPerigo": "ALTO",
+    "totalParticipantes": 4,
+    "totalRecompensas": "5000.00"
+  },
+  {
+    "id": 2,
+    "titulo": "Derrotar o Dragão de Fogo",
+    "status": "ATIVA",
+    "nivelPerigo": "CRITICO",
+    "totalParticipantes": 6,
+    "totalRecompensas": "15000.00"
+  }
+]
+```
+
+</details>
 
 ---
 
@@ -425,7 +711,9 @@ Exemplo de resposta de erro que a aplicação retorna quando parâmetros são in
 }
 ```
 
-Como funciona:
+---
+
+## 🧪 Arquivo de testes HTTP
 
 - Nos `Services` lance exceções customizadas com mensagens claras, por exemplo:
 
@@ -441,52 +729,112 @@ throw new AventureiroInvalidParamsException();
 
 ```
 src/main/java/com/edu/infnet/tp1/
-├── controllers/                     # Controladores REST (1 por operação)
-│   ├── RegistrarAventureiroController.java
-│   ├── BuscarAventureiroPorIdController.java
-│   ├── ListarAventureirosController.java
-│   ├── AtualizarDadosAventureiroController.java
-│   ├── DefinirCompanheiroController.java
-│   ├── RemoverCompanheiroController.java
-│   ├── EncerrarVinculoGuildaController.java
-│   └── RecrutarNovamenteController.java
-├── services/                        # Regras de negócio (1 por operação)
-│   ├── RegistrarAventureiroService.java
-│   ├── BuscarAventureiroPorIdService.java
-│   ├── ListarAventureirosService.java
-│   ├── AtualizarDadosAventureiroService.java
-│   ├── DefinirCompanheiroService.java
-│   ├── RemoverCompanheiroService.java
-│   ├── EncerrarVinculoGuildaService.java
-│   └── RecrutarNovamenteService.java
-├── models/                          # Entidades do domínio
-│   ├── Aventureiro.java
-│   └── Companheiro.java
-├── enums/                           # Enumerações
+├── controllers/
+│   ├── aventura/
+│   │   ├── RegistrarAventureiroController.java
+│   │   ├── BuscarAventureiroPorIdController.java
+│   │   ├── ListarAventureirosController.java
+│   │   ├── AtualizarDadosAventureiroController.java
+│   │   ├── DefinirCompanheiroController.java
+│   │   ├── RemoverCompanheiroController.java
+│   │   ├── EncerrarVinculoGuildaController.java
+│   │   ├── RecrutarNovamenteController.java
+│   │   ├── BuscaAventureiroPorNomeController.java
+│   │   ├── VisualizacaoAventureiroCompletaController.java
+│   │   ├── ListarMissoesController.java
+│   │   ├── BuscaMissaoPorIdController.java
+│   │   ├── RankingParticipacaoController.java
+│   │   └── RelatorioMissoesController.java
+│   └── HealthCheck.java
+├── services/
+│   ├── aventura/
+│   │   ├── RegistrarAventureiroService.java
+│   │   ├── BuscarAventureiroPorIdService.java
+│   │   ├── ListarAventureirosService.java
+│   │   ├── AtualizarDadosAventureiroService.java
+│   │   ├── DefinirCompanheiroService.java
+│   │   ├── RemoverCompanheiroService.java
+│   │   ├── EncerrarVinculoGuildaService.java
+│   │   ├── RecrutarNovamenteService.java
+│   │   ├── BuscaAventureiroPorNomeService.java
+│   │   ├── VisualizacaoAventureiroCompletaService.java
+│   │   ├── ListarMissoesService.java
+│   │   ├── BuscaMissaoPorIdService.java
+│   │   ├── RankingParticipacaoService.java
+│   │   └── RelatorioMissoesService.java
+│   └── organizacao/
+├── repositories/
+│   ├── aventura/
+│   │   ├── AventureiroRepository.java
+│   │   ├── CompanheiroRepository.java
+│   │   ├── MissaoRepository.java
+│   │   └── ParticipacaoMissaoRepository.java
+│   └── organizacao/
+│       ├── OrganizacaoRepository.java
+│       ├── UsuarioRepository.java
+│       ├── RoleRepository.java
+│       ├── PermissionRepository.java
+│       └── UsuarioRoleRepository.java
+├── models/
+│   ├── aventura/
+│   │   ├── Aventureiro.java
+│   │   ├── Companheiro.java
+│   │   ├── Missao.java
+│   │   └── ParticipacaoMissao.java
+│   └── organizacao/
+│       ├── Organizacao.java
+│       ├── Usuario.java
+│       ├── Role.java
+│       ├── Permission.java
+│       └── UsuarioRole.java
+├── enums/
 │   ├── Classes.java
-│   └── Especies.java
-├── data/                            # Simulação de banco de dados (ArrayList)
+│   ├── Especies.java
+│   ├── NivelPerigo.java
+│   ├── StatusMissao.java
+│   └── PapelMissao.java
+├── data/
 │   └── AventureiroData.java
 └── shared/
-  ├── dtos/                        # Data Transfer Objects
-  │   ├── AtualizarAventureiroRequestDto.java
-  │   ├── PaginationQueryDto.java
-  │   └── PaginationResponseDto.java
-  ├── errors/                      # Padrão de erro
-  │   └── ErrorMessage.java
-  ├── exceptions/                  # Exceções customizadas
-  │   ├── AventureiroNotFoundException.java
-  │   ├── AventureiroInvalidParamsException.java
-  └── RestControllerAdvice.java    # Handlers de exceção centralizados
-├── Tp1Application.java              # Classe principal
+    ├── dtos/
+    │   ├── AtualizarAventureiroRequestDto.java
+    │   ├── PaginationQueryDto.java
+    │   ├── PaginationResponseDto.java
+    │   ├── BuscaAventureiroPorNomeDto.java
+    │   ├── AventureiroDetalhesDto.java
+    │   ├── MissaoFiltroDto.java
+    │   ├── MissaoResponseDto.java
+    │   ├── RankingParticipacaoDto.java
+    │   ├── RelatorioMissaoDto.java
+    │   ├── CompanheiroResponseDto.java
+    │   └── AventureiroResponseDto.java
+    ├── errors/
+    │   └── ErrorMessage.java
+    ├── exceptions/
+    │   ├── AventureiroNotFoundException.java
+    │   ├── AventureiroInvalidParamsException.java
+    │   ├── CompanheiroInvalidParamsException.java
+    │   ├── InvalidQueryParamException.java
+    │   └── MissaoNotFoundException.java
+    └── RestControllerAdvice.java
+
+src/main/resources/
+├── application.properties
+└── application-test.properties
+
+docker-compose.yml
+endpoints.http
+pom.xml
 ```
 
 ---
 
 ## 📌 Observações
 
-- **Sem banco de dados** — os dados são armazenados em `ArrayList` em memória (`AventureiroData`)
-- A lista é inicializada com **100 aventureiros** da classe `GUERREIRO` ao iniciar a aplicação
-- Arquitetura: **1 Controller + 1 Service por operação**
+- **Banco de dados:** PostgreSQL 17 em Docker (schema `aventura` para domínio novo, schema `audit` para legado)
+- **Arquitetura:** 3 camadas (Controllers → Services → Repositories → JPA Entities)
+- **Padrão:** 1 Controller + 1 Service por operação
+- **Tratamento de Exceções:** Centralizado no `@ControllerAdvice`
+- **DTOs:** Segregação de dados por domínio (aventura vs organizacao)
 
 ---
