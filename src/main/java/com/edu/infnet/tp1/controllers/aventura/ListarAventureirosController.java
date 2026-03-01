@@ -1,7 +1,6 @@
-package com.edu.infnet.tp1.controllers;
+package com.edu.infnet.tp1.controllers.aventura;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -10,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.edu.infnet.tp1.models.Aventureiro;
-import com.edu.infnet.tp1.services.ListarAventureirosService;
+import com.edu.infnet.tp1.models.aventura.Aventureiro;
+import com.edu.infnet.tp1.services.aventura.ListarAventureirosService;
 import com.edu.infnet.tp1.shared.dtos.PaginationQueryDto;
 import com.edu.infnet.tp1.shared.dtos.PaginationResponseDto;
 
@@ -37,14 +36,14 @@ public class ListarAventureirosController {
     List<Aventureiro> resultado = listarAventureirosService.exec(params);
 
     List<PaginationResponseDto> res = resultado.stream()
-        .map(aventureiros -> new PaginationResponseDto(
-            aventureiros.getId(),
-            aventureiros.getNome(),
-            aventureiros.getClasse(),
-            aventureiros.getNivel(),
-            aventureiros.getAtivo(),
-            aventureiros.getCompanheiro()))
-        .collect(Collectors.toList());
+        .map(aventureiro -> new PaginationResponseDto(
+            aventureiro.getId(),
+            aventureiro.getNome(),
+            aventureiro.getClasse(),
+            aventureiro.getNivel(),
+            aventureiro.isAtivo(),
+            aventureiro.getCompanheiro()))
+        .toList();
 
     int totalAventureiros = listarAventureirosService.contarAventureiros(params);
 
