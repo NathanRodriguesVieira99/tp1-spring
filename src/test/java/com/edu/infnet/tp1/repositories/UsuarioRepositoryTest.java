@@ -13,14 +13,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.edu.infnet.tp1.models.organizacao.Organizacao;
-import com.edu.infnet.tp1.models.organizacao.Permission;
-import com.edu.infnet.tp1.models.organizacao.Role;
-import com.edu.infnet.tp1.models.organizacao.Usuario;
-import com.edu.infnet.tp1.repositories.organizacao.OrganizacaoRepository;
-import com.edu.infnet.tp1.repositories.organizacao.PermissionRepository;
-import com.edu.infnet.tp1.repositories.organizacao.RoleRepository;
-import com.edu.infnet.tp1.repositories.organizacao.UsuarioRepository;
+import com.edu.infnet.tp1.application.repositories.organizacao.OrganizacaoRepository;
+import com.edu.infnet.tp1.application.repositories.organizacao.PermissionRepository;
+import com.edu.infnet.tp1.application.repositories.organizacao.RoleRepository;
+import com.edu.infnet.tp1.application.repositories.organizacao.UsuarioRepository;
+import com.edu.infnet.tp1.domain.models.organizacao.Organizacao;
+import com.edu.infnet.tp1.domain.models.organizacao.Permission;
+import com.edu.infnet.tp1.domain.models.organizacao.Role;
+import com.edu.infnet.tp1.domain.models.organizacao.Usuario;
 
 @SpringBootTest
 @ActiveProfiles("test")
