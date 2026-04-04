@@ -2,10 +2,10 @@ package com.edu.infnet.tp1.application.services.aventura;
 
 import org.springframework.stereotype.Service;
 
-import com.edu.infnet.tp1.application.repositories.aventura.AventureiroRepository;
-import com.edu.infnet.tp1.application.repositories.aventura.CompanheiroRepository;
 import com.edu.infnet.tp1.domain.models.aventura.Aventureiro;
 import com.edu.infnet.tp1.domain.models.aventura.Companheiro;
+import com.edu.infnet.tp1.infrastructure.repositories.aventura.AventureiroRepository;
+import com.edu.infnet.tp1.infrastructure.repositories.aventura.CompanheiroRepository;
 import com.edu.infnet.tp1.shared.exceptions.AventureiroNotFoundException;
 import com.edu.infnet.tp1.shared.exceptions.CompanheiroInvalidParamsException;
 

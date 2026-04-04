@@ -6,8 +6,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.edu.infnet.tp1.application.repositories.aventura.MissaoRepository;
 import com.edu.infnet.tp1.domain.models.aventura.Missao;
+import com.edu.infnet.tp1.infrastructure.repositories.aventura.MissaoRepository;
 
 import lombok.RequiredArgsConstructor;
 

@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.edu.infnet.tp1.application.repositories.aventura.AventureiroRepository;
-import com.edu.infnet.tp1.application.repositories.aventura.ParticipacaoMissaoRepository;
+import com.edu.infnet.tp1.infrastructure.repositories.aventura.AventureiroRepository;
+import com.edu.infnet.tp1.infrastructure.repositories.aventura.ParticipacaoMissaoRepository;
 import com.edu.infnet.tp1.presentation.dtos.RankingParticipacaoDto;
 
 import lombok.RequiredArgsConstructor;

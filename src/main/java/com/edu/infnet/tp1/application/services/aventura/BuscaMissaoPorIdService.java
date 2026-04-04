@@ -5,9 +5,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.edu.infnet.tp1.application.repositories.aventura.MissaoRepository;
-import com.edu.infnet.tp1.application.repositories.aventura.ParticipacaoMissaoRepository;
 import com.edu.infnet.tp1.domain.models.aventura.Missao;
+import com.edu.infnet.tp1.infrastructure.repositories.aventura.MissaoRepository;
+import com.edu.infnet.tp1.infrastructure.repositories.aventura.ParticipacaoMissaoRepository;
 import com.edu.infnet.tp1.presentation.dtos.MissaoDetalhesDto;
 import com.edu.infnet.tp1.presentation.dtos.ParticipanteDto;
 import com.edu.infnet.tp1.shared.exceptions.MissaoNotFoundException;

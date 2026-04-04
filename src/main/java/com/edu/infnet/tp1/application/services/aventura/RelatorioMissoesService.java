@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.edu.infnet.tp1.application.repositories.aventura.MissaoRepository;
-import com.edu.infnet.tp1.application.repositories.aventura.ParticipacaoMissaoRepository;
+import com.edu.infnet.tp1.infrastructure.repositories.aventura.MissaoRepository;
+import com.edu.infnet.tp1.infrastructure.repositories.aventura.ParticipacaoMissaoRepository;
 import com.edu.infnet.tp1.presentation.dtos.RelatorioMissaoDto;
 
 import lombok.RequiredArgsConstructor;

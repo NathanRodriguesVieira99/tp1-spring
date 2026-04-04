@@ -1,4 +1,4 @@
-package com.edu.infnet.tp1.application.repositories.aventura;
+package com.edu.infnet.tp1.infrastructure.repositories.aventura;
 
 import java.util.Optional;
 
@@ -10,8 +10,6 @@ import org.springframework.data.repository.query.Param;
 
 import com.edu.infnet.tp1.domain.enums.Classes;
 import com.edu.infnet.tp1.domain.models.aventura.Aventureiro;
-
-
 
 public interface AventureiroRepository extends JpaRepository<Aventureiro, Long> {
 

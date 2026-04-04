@@ -1,4 +1,4 @@
-package com.edu.infnet.tp1.application.repositories.organizacao;
+package com.edu.infnet.tp1.infrastructure.repositories.organizacao;
 
 import java.util.Optional;
 

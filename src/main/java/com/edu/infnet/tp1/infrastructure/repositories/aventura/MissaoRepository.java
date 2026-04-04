@@ -1,4 +1,4 @@
-package com.edu.infnet.tp1.application.repositories.aventura;
+package com.edu.infnet.tp1.infrastructure.repositories.aventura;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
