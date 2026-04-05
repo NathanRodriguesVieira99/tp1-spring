@@ -1,8 +1,10 @@
+version: "3.9"
+
 services:
-  # rodei ALTER USER postgres WITH PASSWORD 'postgres';
-  # dentro do docker para a imagem funcionar corretamente
+# Usei ALTER USER postgres WITH PASSWORD 'postgres'; para fazer a imagem postgres funcionar corretamente
   pg:
     image: leogloriainfnet/postgres-tp2-spring:2.0-mac
+    container_name: pg
     ports:
       - "5432:5432"
     environment:
@@ -12,13 +14,24 @@ services:
 
   redis:
     image: redis:7
+    container_name: redis
     ports:
       - "6379:6379"
 
   guilda-es:
     image: leogloriainfnet/elastic-tp2-spring:1.0-windows
-    container_name: guilda-es-at
+    container_name: guilda-es
     ports:
       - "9200:9200"
     environment:
       ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:9.3.1
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    environment:
+      ELASTICSEARCH_HOSTS: http://guilda-es:9200
+    depends_on:
+      - guilda-es
