@@ -1,77 +1,22 @@
 @BASE_URL = http://localhost:8080/api
 
-# Captura o ID na hora de registrar um aventureiro para reutilizar dinamicamente.
-@ID = {{Registrar_Aventureiro.response.body.id}} 
-
 # @name HealthCheck
 GET {{BASE_URL}}/health
 
 ###
 
+# @name Top_Missoes_Nos_Últimos_15_Dias
 GET {{BASE_URL}}/missoes/top15dias
 Content-Type: application/json
 
 ###
-# @name Registrar_Aventureiro
-POST {{BASE_URL}}/aventureiros/create
-Content-Type: application/json
 
-{
-  "nome": "Pica Pau",
-  "classe": "LADINO",
-  "nivel": 10,
-  "organizacao": {
-    "id": 1,
-    "ativo": true,
-    "nome": "al-qaeda"
-  },
-  "usuarioCadastro": {
-    "id": 1
-  }
-}
+# @name Busca_Por_Nome
+GET {{BASE_URL}}/produtos/busca/nome?termo=machado
 
 ###
 
-# @name Listar_Aventureiros
-# Query Params 👇
-# ?page=0&size=10&classe=LADINO&ativo=true&nivelMinimo=1
-GET {{BASE_URL}}/aventureiros?page=0&size=10&classe=LADINO&ativo=true&nivelMinimo=1
+# @name Busca_Por_Descricao
+GET {{BASE_URL}}/produtos/busca/descricao?termo=batalhas
 
 ###
-
-# @name Remover_Companheiro
-DELETE {{BASE_URL}}/companheiros/delete/{{ID}}
-Content-Type: application/json
-
-###
-
-# @name Recrutar_Novamente
-PATCH {{BASE_URL}}/aventureiros/guilda/recruit/{{ID}}
-
-###
-
-# @name Detalhes_Aventureiro
-GET {{BASE_URL}}/aventureiros/{{ID}}/detalhes
-
-###
-
-# @name Listar_Missoes
-# Query Params 👇
-# ?page=0&size=10&status=EM_ANDAMENTO&nivelPerigo=ALTO
-GET {{BASE_URL}}/missoes?page=0&size=10
-
-###
-
-# @name Detalhes_Missao
-GET {{BASE_URL}}/missoes/1/detalhes
-
-###
-
-# @name Ranking_Participacao
-GET {{BASE_URL}}/aventureiros/ranking
-
-###
-
-# @name Relatorio_Missoes
-GET {{BASE_URL}}/missoes/relatorio
-
