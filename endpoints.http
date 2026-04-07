@@ -30,3 +30,8 @@ GET {{BASE_URL}}/produtos/busca/frase?termo=Ferramenta essencial
 GET {{BASE_URL}}/produtos/busca/fuzzy?termo=Pergaminhu
 
 ###
+
+# @name Busca_Por_Múltiplos_Campos
+GET {{BASE_URL}}/produtos/busca/multicampos?termo=dragao
+
+###
