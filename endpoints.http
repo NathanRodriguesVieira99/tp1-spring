@@ -32,6 +32,21 @@ GET {{BASE_URL}}/produtos/busca/fuzzy?termo=Pergaminhu
 ###
 
 # @name Busca_Por_Múltiplos_Campos
-GET {{BASE_URL}}/produtos/busca/multicampos?termo=dragao
+GET {{BASE_URL}}/produtos/busca/multicampos?termo=dragao&categoria=armaduras
+
+###
+
+# @name Busca_Com_Filtros
+GET {{BASE_URL}}/produtos/busca/com-filtro?termo=raro&categoria=pergaminhos
+
+###
+
+# @name Busca_Faixa_De_Preco
+GET {{BASE_URL}}/produtos/busca/faixa-preco?min=10&max=50
+
+###
+
+# @name Busca_Combinada
+GET {{BASE_URL}}/produtos/busca/avancada?categoria=armas&raridade=lendario&min=500&max=3000
 
 ###
