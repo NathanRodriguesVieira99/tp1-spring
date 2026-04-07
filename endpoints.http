@@ -20,3 +20,13 @@ GET {{BASE_URL}}/produtos/busca/nome?termo=machado
 GET {{BASE_URL}}/produtos/busca/descricao?termo=batalhas
 
 ###
+
+# @name Busca_Por_Frase_Exata
+GET {{BASE_URL}}/produtos/busca/frase?termo=Ferramenta essencial
+
+###
+
+# @name Busca_Por_Fuzzy
+GET {{BASE_URL}}/produtos/busca/fuzzy?termo=Pergaminhu
+
+###
