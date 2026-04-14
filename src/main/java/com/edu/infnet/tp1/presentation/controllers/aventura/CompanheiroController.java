@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.edu.infnet.tp1.application.services.aventura.CompanheiroService;
 import com.edu.infnet.tp1.domain.models.aventura.Aventureiro;
 import com.edu.infnet.tp1.domain.models.aventura.Companheiro;
+import com.edu.infnet.tp1.presentation.dtos.CompanheiroResponseDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,8 +23,9 @@ public class CompanheiroController {
   private final CompanheiroService companheiroService;
 
   @PostMapping("/create/{id}")
-  public ResponseEntity<?> definirCompanheiro(@PathVariable Long id, @RequestBody Companheiro companheiro) {
-    Companheiro companheiroCriado = companheiroService.criarCompanheiro(id, companheiro);
+  public ResponseEntity<CompanheiroResponseDto> definirCompanheiro(@PathVariable Long id,
+      @RequestBody Companheiro companheiro) {
+    CompanheiroResponseDto companheiroCriado = companheiroService.criarCompanheiro(id, companheiro);
     return ResponseEntity.status(HttpStatus.CREATED).body(companheiroCriado);
   }
 
