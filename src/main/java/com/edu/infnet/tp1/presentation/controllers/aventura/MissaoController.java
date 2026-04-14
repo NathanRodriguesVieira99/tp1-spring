@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class MissaoController {
   private final MissaoService missaoService;
 
-  @GetMapping
+  @GetMapping()
   public ResponseEntity<List<Missao>> listar(
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size) {
@@ -35,10 +35,10 @@ public class MissaoController {
     return ResponseEntity.ok(missaoService.exibirRelatorioMissao());
   }
 
-  @GetMapping("/missoes/{id}/detalhes")
+  @GetMapping("/{missaoId}/detalhes")
   public ResponseEntity<MissaoDetalhesDto> detalhesMissao(
-      @PathVariable Long id) {
-    return ResponseEntity.ok(missaoService.exibirMissaoComDetalhes(id));
+      @PathVariable Long missaoId) {
+    return ResponseEntity.ok(missaoService.exibirMissaoComDetalhes(missaoId));
   }
 
   @GetMapping("/ranking")

@@ -31,10 +31,10 @@ public class MissaoService {
     return missaoRepository.findById(id).orElseThrow(MissaoNotFoundException::new);
   }
 
-  public MissaoDetalhesDto exibirMissaoComDetalhes(Long id) {
-    Missao missao = missaoRepository.findById(id).orElseThrow(MissaoNotFoundException::new);
+  public MissaoDetalhesDto exibirMissaoComDetalhes(Long missaoId) {
+    Missao missao = missaoRepository.findById(missaoId).orElseThrow(MissaoNotFoundException::new);
 
-    var participacoes = participacaoMissaoRepository.findByMissaoIdComAventureiro(id);
+    var participacoes = participacaoMissaoRepository.findByMissaoIdComAventureiro(missaoId);
 
     List<ParticipanteDto> participantes = participacoes.stream()
         .map(p -> new ParticipanteDto(
