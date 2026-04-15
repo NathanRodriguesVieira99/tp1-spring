@@ -16,7 +16,7 @@ import com.edu.infnet.tp1.presentation.dtos.MissaoDetalhesDto;
 import com.edu.infnet.tp1.presentation.dtos.ParticipanteDto;
 import com.edu.infnet.tp1.presentation.dtos.RankingParticipacaoDto;
 import com.edu.infnet.tp1.presentation.dtos.RelatorioMissaoDto;
-import com.edu.infnet.tp1.shared.exceptions.MissaoNotFoundException;
+import com.edu.infnet.tp1.shared.errors.exceptions.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,11 +28,11 @@ public class MissaoService {
   private final MissaoRepository missaoRepository;
 
   public Missao buscarMissaoPorId(Long id) {
-    return missaoRepository.findById(id).orElseThrow(MissaoNotFoundException::new);
+    return missaoRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
   }
 
   public MissaoDetalhesDto exibirMissaoComDetalhes(Long missaoId) {
-    Missao missao = missaoRepository.findById(missaoId).orElseThrow(MissaoNotFoundException::new);
+    Missao missao = missaoRepository.findById(missaoId).orElseThrow(ResourceNotFoundException::new);
 
     var participacoes = participacaoMissaoRepository.findByMissaoIdComAventureiro(missaoId);
 

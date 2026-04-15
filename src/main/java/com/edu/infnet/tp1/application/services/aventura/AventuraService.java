@@ -15,9 +15,9 @@ import com.edu.infnet.tp1.presentation.dtos.AventureiroResponseDto;
 import com.edu.infnet.tp1.presentation.dtos.CompanheiroResponseDto;
 import com.edu.infnet.tp1.presentation.dtos.PaginationQueryDto;
 import com.edu.infnet.tp1.presentation.dtos.PaginationResponseDto;
-import com.edu.infnet.tp1.shared.exceptions.AventureiroInvalidParamsException;
-import com.edu.infnet.tp1.shared.exceptions.AventureiroNotFoundException;
-import com.edu.infnet.tp1.shared.exceptions.InvalidQueryParamException;
+import com.edu.infnet.tp1.shared.errors.exceptions.InvalidParamsException;
+import com.edu.infnet.tp1.shared.errors.exceptions.InvalidQueryParamsException;
+import com.edu.infnet.tp1.shared.errors.exceptions.ResourceNotFoundException;
 import com.edu.infnet.tp1.shared.mappers.AventureiroResponseDtoMapper;
 import com.edu.infnet.tp1.shared.mappers.PaginationResponseDtoMapper;
 
@@ -38,7 +38,7 @@ public class AventuraService {
 
   public AventureiroResponseDto atualizarAventureiro(Long id, AtualizarAventureiroRequestDto aventureiroAtualizado) {
     Aventureiro aventureiro = aventureiroRepository.findById(id)
-        .orElseThrow(() -> new AventureiroNotFoundException());
+        .orElseThrow(() -> new InvalidParamsException());
 
     if (aventureiroAtualizado.nome() != null && !aventureiroAtualizado.nome().isEmpty())
       aventureiro.setNome(aventureiroAtualizado.nome());
@@ -54,7 +54,7 @@ public class AventuraService {
   }
 
   public Aventureiro buscarAventureiroPorId(Long id) {
-    return aventureiroRepository.findById(id).orElseThrow(() -> new AventureiroNotFoundException());
+    return aventureiroRepository.findById(id).orElseThrow(() -> new InvalidParamsException());
   }
 
   public AventureiroResponseDto buscarAventureiroResponsePorId(Long id) {
@@ -64,38 +64,38 @@ public class AventuraService {
 
   public List<PaginationResponseDto> listarAventureiros(PaginationQueryDto params) {
     if (params.page() < 0) {
-      throw new InvalidQueryParamException();
+      throw new InvalidQueryParamsException();
     }
 
     if (params.size() < 1 || params.size() > 50) {
-      throw new InvalidQueryParamException();
+      throw new InvalidQueryParamsException();
     }
 
     if (params.ativo() != null && !params.ativo()) {
-      throw new InvalidQueryParamException();
+      throw new InvalidQueryParamsException();
     }
 
     if (params.nivelMinimo() != null && params.nivelMinimo() <= 0) {
-      throw new InvalidQueryParamException();
+      throw new InvalidQueryParamsException();
     }
 
     Pageable pageable = PageRequest.of(params.page(), params.size());
 
     return aventureiroRepository.findAll(pageable).getContent().stream()
-      .map(PaginationResponseDtoMapper::toPaginationResponseDto)
+        .map(PaginationResponseDtoMapper::toPaginationResponseDto)
         .toList();
   }
 
   public Aventureiro encerrarVinculoGuilda(Long id) {
     Aventureiro aventureiro = aventureiroRepository.findById(id)
-        .orElseThrow(() -> new AventureiroNotFoundException());
+        .orElseThrow(() -> new InvalidParamsException());
 
     if (aventureiro.isAtivo()) {
       aventureiro.setAtivo(false);
       return aventureiroRepository.save(aventureiro);
     }
 
-    throw new AventureiroNotFoundException();
+    throw new InvalidParamsException();
   }
 
   public int contarAventureiros(PaginationQueryDto params) {
@@ -103,31 +103,31 @@ public class AventuraService {
   }
 
   public Aventureiro recrutarNovamente(Long id) {
-    Aventureiro aventureiro = aventureiroRepository.findById(id).orElseThrow(() -> new AventureiroNotFoundException());
+    Aventureiro aventureiro = aventureiroRepository.findById(id).orElseThrow(() -> new InvalidParamsException());
 
     if (!aventureiro.isAtivo()) {
       aventureiro.setAtivo(true);
       return aventureiroRepository.save(aventureiro);
     }
 
-    throw new AventureiroNotFoundException();
+    throw new InvalidParamsException();
   }
 
   public AventureiroResponseDto registrarAventureiro(Aventureiro aventureiro) {
     if (aventureiro.getNome() == null || aventureiro.getNome().isBlank())
-      throw new AventureiroInvalidParamsException();
+      throw new InvalidParamsException();
 
     if (aventureiro.getClasse() == null)
-      throw new AventureiroInvalidParamsException();
+      throw new InvalidParamsException();
 
     if (aventureiro.getNivel() == null || aventureiro.getNivel() <= 0)
-      throw new AventureiroInvalidParamsException();
+      throw new InvalidParamsException();
 
     if (aventureiro.getOrganizacao() == null)
-      throw new AventureiroInvalidParamsException();
+      throw new InvalidParamsException();
 
     if (aventureiro.getUsuarioCadastro() == null)
-      throw new AventureiroInvalidParamsException();
+      throw new InvalidParamsException();
 
     aventureiro.setAtivo(true);
     aventureiro.setCompanheiro(null);
@@ -139,7 +139,7 @@ public class AventuraService {
 
   public AventureiroDetalhesDto visualizarAventureiroCompleto(Long id) {
     Aventureiro aventureiro = aventureiroRepository.findByIdComCompanheiro(id)
-        .orElseThrow(AventureiroNotFoundException::new);
+        .orElseThrow(ResourceNotFoundException::new);
 
     int totalParticipacoes = (int) participacaoMissaoRepository.countByAventureiroId(id);
 
