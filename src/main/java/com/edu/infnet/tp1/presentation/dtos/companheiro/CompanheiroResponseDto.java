@@ -1,4 +1,4 @@
-package com.edu.infnet.tp1.presentation.dtos;
+package com.edu.infnet.tp1.presentation.dtos.companheiro;
 
 import com.edu.infnet.tp1.domain.enums.Especies;
 

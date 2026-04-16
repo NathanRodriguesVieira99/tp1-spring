@@ -1,4 +1,4 @@
-package com.edu.infnet.tp1.presentation.dtos;
+package com.edu.infnet.tp1.presentation.dtos.missao;
 
 import java.time.OffsetDateTime;
 

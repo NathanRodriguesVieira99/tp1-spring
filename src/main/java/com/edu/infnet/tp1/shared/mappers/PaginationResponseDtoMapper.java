@@ -1,7 +1,7 @@
 package com.edu.infnet.tp1.shared.mappers;
 
 import com.edu.infnet.tp1.domain.models.aventura.Aventureiro;
-import com.edu.infnet.tp1.presentation.dtos.PaginationResponseDto;
+import com.edu.infnet.tp1.presentation.dtos.pagination.PaginationResponseDto;
 
 public class PaginationResponseDtoMapper {
   public static PaginationResponseDto toPaginationResponseDto(Aventureiro aventureiro) {

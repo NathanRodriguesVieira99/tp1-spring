@@ -1,6 +1,7 @@
-package com.edu.infnet.tp1.presentation.dtos;
+package com.edu.infnet.tp1.presentation.dtos.aventura;
 
 import com.edu.infnet.tp1.domain.enums.Classes;
+import com.edu.infnet.tp1.presentation.dtos.companheiro.CompanheiroResponseDto;
 
 public record AventureiroResponseDto(
     Long id,
