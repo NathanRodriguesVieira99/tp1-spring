@@ -1,4 +1,4 @@
-package com.edu.infnet.tp1.presentation.controllers;
+package com.edu.infnet.tp1.presentation.controllers.healthcheck;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
