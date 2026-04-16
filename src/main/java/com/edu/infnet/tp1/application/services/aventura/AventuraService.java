@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 import com.edu.infnet.tp1.domain.models.aventura.Aventureiro;
 import com.edu.infnet.tp1.infrastructure.repositories.aventura.AventureiroRepository;
 import com.edu.infnet.tp1.infrastructure.repositories.aventura.ParticipacaoMissaoRepository;
-import com.edu.infnet.tp1.presentation.dtos.AtualizarAventureiroRequestDto;
-import com.edu.infnet.tp1.presentation.dtos.AventureiroDetalhesDto;
-import com.edu.infnet.tp1.presentation.dtos.AventureiroResponseDto;
-import com.edu.infnet.tp1.presentation.dtos.CompanheiroResponseDto;
-import com.edu.infnet.tp1.presentation.dtos.PaginationQueryDto;
-import com.edu.infnet.tp1.presentation.dtos.PaginationResponseDto;
+import com.edu.infnet.tp1.presentation.dtos.aventura.AtualizarAventureiroRequestDto;
+import com.edu.infnet.tp1.presentation.dtos.aventura.AventureiroDetalhesDto;
+import com.edu.infnet.tp1.presentation.dtos.aventura.AventureiroResponseDto;
+import com.edu.infnet.tp1.presentation.dtos.companheiro.CompanheiroResponseDto;
+import com.edu.infnet.tp1.presentation.dtos.pagination.PaginationQueryDto;
+import com.edu.infnet.tp1.presentation.dtos.pagination.PaginationResponseDto;
 import com.edu.infnet.tp1.shared.errors.exceptions.InvalidParamsException;
 import com.edu.infnet.tp1.shared.errors.exceptions.InvalidQueryParamsException;
 import com.edu.infnet.tp1.shared.errors.exceptions.ResourceNotFoundException;
@@ -81,9 +81,15 @@ public class AventuraService {
 
     Pageable pageable = PageRequest.of(params.page(), params.size());
 
-    return aventureiroRepository.findAll(pageable).getContent().stream()
+    return aventureiroRepository.findComFiltros(params.classe(), params.ativo(), params.nivelMinimo(), pageable)
+        .getContent()
+        .stream()
         .map(PaginationResponseDtoMapper::toPaginationResponseDto)
         .toList();
+  }
+
+  public int contarAventureiros(PaginationQueryDto params) {
+    return (int) aventureiroRepository.countComFiltros(params.classe(), params.ativo(), params.nivelMinimo());
   }
 
   public Aventureiro encerrarVinculoGuilda(Long id) {
@@ -96,10 +102,6 @@ public class AventuraService {
     }
 
     throw new InvalidParamsException();
-  }
-
-  public int contarAventureiros(PaginationQueryDto params) {
-    return (int) aventureiroRepository.count();
   }
 
   public Aventureiro recrutarNovamente(Long id) {

@@ -15,12 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.edu.infnet.tp1.application.services.aventura.AventuraService;
+import com.edu.infnet.tp1.domain.enums.Classes;
 import com.edu.infnet.tp1.domain.models.aventura.Aventureiro;
-import com.edu.infnet.tp1.presentation.dtos.AtualizarAventureiroRequestDto;
-import com.edu.infnet.tp1.presentation.dtos.AventureiroDetalhesDto;
-import com.edu.infnet.tp1.presentation.dtos.AventureiroResponseDto;
-import com.edu.infnet.tp1.presentation.dtos.PaginationQueryDto;
-import com.edu.infnet.tp1.presentation.dtos.PaginationResponseDto;
+import com.edu.infnet.tp1.presentation.dtos.aventura.AtualizarAventureiroRequestDto;
+import com.edu.infnet.tp1.presentation.dtos.aventura.AventureiroDetalhesDto;
+import com.edu.infnet.tp1.presentation.dtos.aventura.AventureiroResponseDto;
+import com.edu.infnet.tp1.presentation.dtos.pagination.PaginationQueryDto;
+import com.edu.infnet.tp1.presentation.dtos.pagination.PaginationResponseDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -68,7 +69,7 @@ public class AventuraController {
   public ResponseEntity<List<PaginationResponseDto>> listarAventureiros(
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size,
-      @RequestParam(required = false) String classe,
+      @RequestParam(required = false) Classes classe,
       @RequestParam(required = false) Boolean ativo,
       @RequestParam(required = false) Integer nivelMinimo) {
     PaginationQueryDto params = new PaginationQueryDto(page, size, classe, ativo, nivelMinimo);
