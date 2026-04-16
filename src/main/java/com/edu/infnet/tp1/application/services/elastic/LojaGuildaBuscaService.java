@@ -11,7 +11,6 @@ import com.edu.infnet.tp1.presentation.dtos.elastic.ProdutoRetornadoDto;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
-import co.elastic.clients.json.JsonData;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -26,9 +25,9 @@ public class LojaGuildaBuscaService {
             .query(q -> q.bool(b -> b
                 .filter(f -> f.term(t -> t.field("categoria").value(categoria)))
                 .filter(f -> f.term(t -> t.field("raridade").value(raridade)))
-                .filter(f -> f.range(r -> r.untyped(u -> u.field("preco")
-                    .gte(JsonData.of(min))
-                    .lte(JsonData.of(max))))))),
+                .filter(f -> f.range(r -> r.number(n -> n.field("preco")
+                    .gte(min.doubleValue())
+                    .lte(max.doubleValue())))))),
         LojaGuildaDocument.class);
 
     return toDtoList(response);
@@ -49,11 +48,11 @@ public class LojaGuildaBuscaService {
   public List<ProdutoRetornadoDto> buscarFaixaPreco(BigDecimal min, BigDecimal max) throws IOException {
     SearchResponse<LojaGuildaDocument> response = client.search(
         s -> s.index("guilda_loja")
-            // tentar resolver o untyped
-            .query(q -> q.range(r -> r.untyped(rn -> rn
-                .field("preco")
-                .gte(JsonData.of(min))
-                .lte(JsonData.of(max))))),
+            .query(q -> q.range(r -> r
+                .number(n -> n
+                    .field("preco")
+                    .gte(min.doubleValue())
+                    .lte(max.doubleValue())))),
         LojaGuildaDocument.class);
 
     return toDtoList(response);
